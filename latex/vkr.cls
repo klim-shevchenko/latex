@@ -343,7 +343,7 @@
 \renewcommand\thesubsubsection{\thesubsection .\@arabic\c@subsubsection}
 \renewcommand\theparagraph{\thesubsubsection.\@arabic\c@paragraph}
 
-\def\@startsection#1#2#3#4#5#6#7{% 7-й параметр - стиль команды с *
+\def\@startsection#1#2#3#4#5#6#7{% 7-й параметр - стиль команды python *
   \if@noskipsec \leavevmode \fi
   \par
   \@tempskipa #4\relax
