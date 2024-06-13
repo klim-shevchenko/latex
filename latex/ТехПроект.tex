@@ -390,65 +390,102 @@ im2\_2 = Sprite('images/person2.png')
 \subsection{Game}
 \subsubsection{Описание модуля}
 \paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, **params) 
-\begin{itemize}
+def \_\_init\_\_(self,  canvas, window, **params) 
+\begin{itemize} 
 	\item self.rpg\_dict\_of\_area = {} 
-	\item Описание параметра: параметр - словарь, хранящий в себе множество экземпляров класса Area, {number - ключ : name Area - значение}.
-	\item self.team\_of\_pc[] = name\_pc 
-	\item Описание параметра: параметр - список, хранящий в себе имена экземпляров класса Actor с параметром category = "pc".
+	\item словарь, хранящий в себе множество экземпляров класса Area, {number - ключ : name Area - значение}
+	\item self.team\_of\_pc = [] 
+	\item список, хранящий в себе имена экземпляров класса Actor с параметром category = "pc"
+	\item self.canvas = canvas 
+	\item графика
+	\item self.root = window 
+	\item окно для графики
+	\item self.current\_area = None 
+	\item параметр хранящий, текущую зону
+	\item self.scripts = {}  
+	\item Словарь для хранения запущенных сценариев
+	\item self.events = {} 
+	\item Словарь для хранения запущенных event`ов сценариев
+	\item self.canvas.bind("<Button-1>", self.mouse\_left\_click)
+	\item обработчик клика
+	\item Game.game = self
+	\item экземпляр игры, для обращения к нему напрямую
 \end{itemize}
 \subsubsection{Методы}
-\paragraph{New\_item}
-def new\_item(self, name, **params)
-Описание метода: метод отвечающий за создание класса, потомка от Item и создание поля из параметров, и установление их в начальные значения.
-\paragraph{New\_spell}
-def new\_spell(self, name, **params, self. name, level, type, damage, hp)
-Описание метода: метод отвечающий за создание класса, потомка от Spell и создание поля из параметров, и установление их в начальные значения.
+\paragraph{new\_area}
+def new\_area(self, name, area)
+Описание метода: Добавляет новую зону в список.
+\paragraph{set\_area}
+def set\_area(self, name)
+Описание метода: Устанавливает текущую зону, загружает графику зоны.
 \paragraph{New\_actor}
 def new\_actor(self, name, **params)
 Описание метода: метод отвечающий за создание класса, потомка от Actor и создание поля из параметров, и установление их в начальные значения.
-\paragraph{New\_area}
-def new\_area(name, area)
-Описание метода: метод отвечающий за создание класса, потомка от Area и создание поля из параметров, и установление их в начальные значения.
-\paragraph{Set\_area}
-def set\_area(name)
-Описание метода: метод отвечающий за размещение экземпляра класса Area в поле rpg\_dict\_of\_area класса game.
+\paragraph{start\_script}
+def start\_script(self, script\_function, script\_name, *args)
+Описание метода: Запускает сценарий в отдельном потоке с возможностью остановки и передачи аргументов.
+\paragraph{stop\_script}
+def stop\_script(self, script\_name)
+Описание метода: Останавливает сценарий по имени.
 \paragraph{Add\_pc\_to\_team}
 def add\_pc\_to\_team(self, pc)
 Описание метода: метод отвечающий за добавление имени экземпляра класса Actor с параметром category = "pc" в список team\_of\_pc, хранящий имена всех игровых персонажей.
 \paragraph{Remove\_pc\_from\_team}
 def remove\_pc\_from\_team(self, pc)
 Описание метода: метод отвечающий за удаление имени экземпляра класса Actor с параметром category = "pc" в список team\_of\_pc, хранящий имена всех игровых персонажей.
-\paragraph{Start\_script}
-def start\_script(script)
-Описание метода: метод отвечающий за активацию скрипта.
-\paragraph{Stop\_thread}
-def stop\_thread(script)
-Описание метода: метод отвечающий за прекращение действий скрипта.
+\paragraph{set\_team}
+def set\_team(self, x, y, z)
+Описание метода: Устанавливает координаты персонажей команды.
+\paragraph{update}
+def update(self)
+Описание метода: Вызывается в таймере для обновления всех переменных в текущей зоне.
+\paragraph{mouse\_left\_click}
+def mouse\_left\_click(self, event)
+Описание метода: обрабатывает клик мыши.
+\paragraph{timer}
+def timer(self)
+Описание метода: Таймер дожен вызывать метод update постоянно.
+
 
 \subsection{Area}
 \subsubsection{Описание модуля}
 \paragraph{Конструктор и поля модуля}
 def \_\_init\_\_(self, **params)
 \begin{itemize}
-	\item self.area\_zone = params
-	\item Описание параметра: параметр определяющий особенности конкретной зоны (то есть Лес, скорость всех персонажей, понижена вдвое. Река передвижение по зоне невозможно и т.д.) %тут не уверен
-	\item self.area\_list\_objects = params 
-	\item Описание параметра: параметр - список, хранящий в себе множество экземпляров классов Item, Actor.
+	\item self.area\_zone = params 
+	\item параметр определяющий особенности конкретной зоны
+	\item self.objects = [] 
+	\item список, хранящий в себе множество экземпляров классов Item
+	\item self.sprites = [] 
+	\item список фоновых спрайтов
+	\item self.rectangles = None 
+	\item список, хранящий в себе множетво прямоугольников
 \end{itemize}
 \subsubsection{Методы}
 \paragraph{Add\_sprite}
-def add\_sprite (x, y, sprite)
-Описание метода: метод отвечающий за вызов метода add\_sprite у класса Graphics.
-\paragraph{Add\_obj}
-def add\_obj(self, name, obj, **params)
-Описание метода: метод отвечающий за добавление экземпляров классов Item, Actor, в поле area\_list\_objects экземпляра класса Area.
-\paragraph{Check\_obj\_sprite}
-def check\_obj\_sprite(x, y, z, sprite)
-Описание метода: метод отвечающий за проверку пересекаются ли координаты Sprite`ов различных объектов в экземпляре класса Area.
-\paragraph{Set\_team}
-def set\_team(x, y)
-Описание метода: метод отвечающий за установку команды игровых персонажей в конкретной зоне
+def add\_sprite(self, sprite, x, y, z)
+Описание метода: Добавляет спрайт в зону.
+\paragraph{add\_object}
+def add\_object(self, obj, x, y, z)
+Описание метода: Добавляет объект в зону.
+\paragraph{remove\_object}
+def remove\_object(self, obj)
+Описание метода: Удаляет объект из зоны.
+\paragraph{load\_sprites}
+def load\_sprites(self)
+Описание метода: Загружает все спрайты зоны.
+\paragraph{add\_rect}
+def add\_rect(self, rec)
+Описание метода: Добавляет прямоугольник в зону.
+\paragraph{entry\_script}
+def entry\_script(self))
+Описание метода: Запускается, когда команда входит в зону.
+\paragraph{exit\_script}
+def exit\_script(self)
+Описание метода: Запускается, когда команда выходит из зоны.
+\paragraph{update}
+def update(self)
+Описание метода: Изменяет и проверяет изменение всех персонажей в зоне.
 
 \subsection{Sprite}
 \subsubsection{Описание модуля}
@@ -457,6 +494,7 @@ def \_\_init\_\_(self, image)
 \begin{itemize}
 	\item self.spr\_image = image
 	\item Описание параметра: параметр хранит изображение конкретного экземпляра класса Sprite.
+	\item self.tag = None
 	\item self.spr\_x = x
 	\item Описание параметра: параметр хранит числовое значение обозначающее расположение конкретного экземпляра класса Sprite.
 	\item self.spr\_y = y
@@ -464,161 +502,205 @@ def \_\_init\_\_(self, image)
 	\item self.spr\_z = z
 	\item Описание параметра: параметр хранит числовое значение обозначающее расположение конкретного экземпляра класса Sprite.
 \end{itemize}
-
+\subsubsection{Методы}
+\paragraph{set\_tag}
+def set\_tag(self, tag)
+\paragraph{set\_z}
+def set\_z(self, z)
+\paragraph{get\_tag}
+def get\_tag(self)
+\paragraph{set\_coords}
+def set\_coords(self, new\_x, new\_y)
+\paragraph{update}
+def update(self)
 \subsection{Graphics}
 \subsubsection{Описание модуля}
 \paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self)
+def \_\_init\_\_(self, master, **kwargs)
 \begin{itemize}
-	\item self.anim = {}
-	\item Описание параметра: список анимаций
+	\item super().\_\_init\_\_(master, **kwargs)
+	\item self.sprites = [] 
+	\item список спрайтов
+	\item Graphics.canvas = self
+	\item параметр для работы с графикой, где к ней нужно обращаться напрямую
 \end{itemize}
 \subsubsection{Методы}
-\paragraph{Change\_frame}
-def change\_frame(self, id, img)
-Описание метода: Смена кадра анимации.
-\paragraph{Add\_anim}
-def add\_anim(self, a, b)
-Описание метода: добавить анимацию
-\paragraph{OnTimer}
-def onTimer(self)
-Описание метода: Цикл анимаций
-\paragraph{Draw\_all}
-def draw\_all(self, sprite)
-Описание метода: отрисовать все спрайты
-\paragraph{Add\_sprite}
-def add\_sprite(self, sprite)
-Описание метода: метод отвечающий за отображение экземпляра класса Sprite
-\paragraph{Update}
+\paragraph{add\_sprite}
+def add\_sprite(self, sprite, x, y, z, **kwargs)
+Описание метода: Добавляет спрайт на Canvas
+\paragraph{update}
 def update(self)
-Описание метода: метод проверяющий координаты всех объектов, состояния объектов, всех кадров анимаций, а затем вызывает метод draw\_all.
+Описание метода: Перерисовывает все спрайты
+\paragraph{change\_sprite}
+def change\_sprite(self, sprite, new\_sprite)
+Описание метода: Меняет  спрайт на новый
+\paragraph{delete\_sprite}
+def delete\_sprite(self, sprite)
+Описание метода: Удаляет спрайт с Canvas
+\paragraph{clear\_all}
+def clear\_all(self)
+Описание метода: Удаляет все спрайты с Canvas
 
-\subsection{Animation}
+\subsection{Animation(Sprite)}
 \subsubsection{Описание модуля}
 \paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, name, file\_name, n, time)
+def \_\_init\_\_(self, frames, cycle=True)
 \begin{itemize}
-	\item self.frame = 0
-	\item Описание параметра: """индекс кадра"""
-	\item self.time = time
-	\item Описание параметра: """скорость анимации"""
-	\item self.name = name
-	\item Описание параметра: """название анимации"""
-	\item self.anim = []
+	\item super().\_\_init\_\_(frames[0])
+	\item self.images = frames
 	\item Описание параметра: """список кадров"""
-	\item self.n = n
-	\item Описание параметра: """колличество кадров в анимации"""
-	\item self.file\_name = file\_name
-	\item Описание параметра: """имя файла"""
+	\item self.current\_frame = 0
+	\item self.images = [tk.PhotoImage(file=frame) for frame in frames]   
+	\item Загрузка всех кадров анимации
+	\item self.image = self.images[0]
+	\item Установка начального изображения
+	\item self.speed = 3
+	\item Описание параметра: """скорость анимации"""
+	\item self.counter = self.speed
+	\item self.cycle = cycle
+	\item self.running = True
+	
 \end{itemize}
 \subsubsection{Методы}
-\paragraph{onTimerAnimation}
-def onTimerAnimation(self)
-Описание метода: Счетчик кадров анимации.
-\paragraph{Crop}
-def crop(self)
-Описание метода: Разбиение на кадры
-\paragraph{Get\_frame}
-def get\_frame(self)
-Описание метода: Возвращает текущий кадр
-\paragraph{Draw\_all}
-def draw\_all(self, sprite)
-Описание метода: отрисовать все спрайты
+\paragraph{update:}
+def update(self):
+Меняет текущее изображение в списке изображений.
 
 \subsection{Object}
 \subsubsection{Описание модуля}
 \paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, name, hp, ac, speed, bool(alive), bool(angry), damage, category, x, y, z)
+def \_\_init\_\_(self, x, y, z, **params)
 \begin{itemize}
-	\item self.obj\_name = name 
-	\item Описание параметра: параметр хранит название конкретного экземпляра класса Object.
-	\item self.obj\_hp = hp 
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц жизни у конкретного экземпляра класса Object.
-	\item self.obj\_ac = ac
-	\item Описание параметра: параметр хранит числовое значение обозначающее класс доспеха у конкретного экземпляра класса Object.
-	\item self.obj\_speed = speed 
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц передвижения у конкретного экземпляра класса Object.
-	\item self.obj\_alive = alive 
-	\item Описание параметра: параметр хранит логическое значение обозначающее статус: жив или мёртв(возможно ли с ним взаимодействие) конкретный экземпляр класса Object.
-	\item self.obj\_angry = angry 
-	\item Описание параметра: параметр хранит логическое значение обозначающее агрессивно ли настроен конкретный экземпляр класса Object, т.е. может ли он вызывать метод def attack().
-	\item self.obj\_damage = damage
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц урона, у конкретного экземпляра класса Object, на которое может быть уменьшено колличество единиц жизни(параметр obj\_hp) у другого экземпляра класса Object.
-	\item self.obj\_category = category 
-	\item Описание параметра: параметр хранит текстовое значение обозначающее принадлежность его к определённому наследуемому классу - т.е. у экземпляра класса PlayerCharacter category будет иметь значение "pc", у враждебно настроенного NPC(экземпляр класса Actor) будет иметь значение "enemy", у не враждебно настроенного NPC(экземпляр класса Actor) будет иметь значение "friend".
-	\item self.obj\_pos\_x = x 
-	\item Описание параметра: параметр хранит числовое значение обозначающее расположение на экране(или зоны - экземпляра класса Area) по координате x у конкретного экземпляра класса Object.
-	\item self.obj\_pos\_y = y  
-	\item Описание параметра: параметр хранит числовое значение обозначающее расположение на экране(или зоны - экземпляра класса Area) по координате y у конкретного экземпляра класса Object.
-	\item self.obj\_pos\_z = z 
-	\item Описание параметра: параметр хранит числовое значение обозначающее расположение на экране(или зоны - экземпляра класса Area) по координате z у конкретного экземпляра класса Object.
+	\item self.pos\_x = x
+	\item координата x
+	\item self.pos\_y = y
+	\item координата y
+	\item self.pos\_z = z
+	\item координата z
+	\item self.current\_state = None
+	\item текущее состояние
+	\item self.visible = True
+	\item видим ли объект
+	\item self.on\_click = lambda x : x
+	\item возможно ли кликнуть по объекту
+	\item if self.states is not None:
+	self.set\_state(next(iter(self.states)))  # Установка первого состояния
+	\item установка первого состояния если потребуется
+	\item self.rectangle = Rectangle(x, y, 10, 10) # из спрайта
+	\item прямоугольник объекта
 \end{itemize}
 \subsubsection{Методы}
-\paragraph{Move}
-def move(self, x, y, z, speed):
-Описание метода: метод отвечающий за изменение полей obj\_pos\_x, obj\_pos\_y obj\_pos\_z экземпляра класса Object.
-\paragraph{Attack}
- def attack(obj):
-Описание метода: метод отвечающий за изменение поля obj\_hp экземпляра класса Object.
-\paragraph{Die}
-def die(self, alive, category)
-Описание метода: метод отвечающий за изменение полей obj\_category, obj\_alive экземпляра класса Object.
-\paragraph{Set\_click\_script}
-def set\_click\_script(script):
-Описание метода: метод отвечающий за действие скрипта у конкретного объекта.
+\paragraph{set\_state}
+def set\_state(self, state\_name):
+Описание метода: меняет текущее состояние объекта
+\paragraph{actor\_in}
+ def actor\_in(self, actor):
+Описание метода:Вызывается когда actor входит внутрь объекта
+\paragraph{update}
+def update(self)
+Описание метода: ничего не делает
 
 \subsection{Actor(Object)}
 \subsubsection{Описание модуля}
 \paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, name, **params)
+def \_\_init\_\_(self, x, y, z, **params)
 \begin{itemize}
-	\item self.act\_name = name 
-	\item Описание параметра: параметр хранит название конкретного экземпляра класса Actor.
-	\item self.act\_loot = loot 
-	\item Описание параметра: параметр - список, который хранит в себе некоторое количество экземпляров класса Item.
-	\item self.act\_text = text 
-	\item Описание параметра: параметр хранит текстовое значение, которое будет выведено на экран методом readtext класса Actor.
-	\item self.act\_class = class 
-	\item Описание параметра: параметр хранит текстовое значение, обозначающее принадлежность к определённому классу игрового персонажа: "warrior" "wizard" "cleric".
-	\item self.act\_level = level 
-	\item Описание параметра: параметр хранит числовое значение обозначающее уровень у конкретного экземпляра класса Actor.
-	\item self.act\_race = race 
-	\item Описание параметра: параметр хранит текстовое значение, обозначающее принадлежность к определённой расе игрового персонажа: "human" "elf" "dwarf".
-	\item self.act\_str = str 
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц параметра "сила" игрового персонажа у конкретного экземпляра класса Actor.
-	\item self.act\_agi = agi 
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц параметра "ловкость" игрового персонажа у конкретного экземпляра класса Actor.
-	\item self.act\_con = con 
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц параметра "телосложение" игрового персонажа у конкретного экземпляра класса Actor.
-	\item self.act\_int = int 
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц параметра "интеллект" игрового персонажа у конкретного экземпляра класса Actor.
-	\item self.act\_wiz = wiz 
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц параметра "мудрость" игрового персонажа у конкретного экземпляра класса Actor.
-	\item self.act\_chr = chr
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц параметра "харизма" игрового персонажа у конкретного экземпляра класса Actor.
-	\item self.act\_inventory = inventory
-	\item Описание параметра: параметр - список, хранящий в себе множество экземпляров классов Item.
-	\item self.act\_list\_spells = spells
-	\item Описание параметра: параметр - список, хранящий в себе множество экземпляров классов Spell.
-	\item self.act\_status\_cadr
-	\item Описание параметра: параметр - хранит в себе текущий кадр анимации.
+	\item self.sprite = self.states[next(iter(self.states))]
+	\item
+	\item super().\_\_init\_\_(x, y, z, **params)
+	\item self.speed\_x = 0 
+	\item значение скорости x
+	\item self.speed\_y = 0  
+	\item значение скорости y
+	\item self.target\_x = 0
+	\item координата x в которую будет двигаться персонаж
+	\item self.target\_y = 0
+	\item координата y в которую будет двигаться персонаж
+	\item self.rectangle = Rectangle(self.pos\_x, self.pos\_y, self.sprite.image.width(), self.sprite.image.height())
+	\item прямоугольник персонажа
+	\item self.is\_attack = False
+	\item состояние - атакует ли персонаж сейчас
 \end{itemize}
 \subsubsection{Методы}
-\paragraph{Readtext}
-def readtext(self, text)
-Описание метода: метод отвечающий за вывод содержания поля act\_text экземпляра класса Actor на экран.
-\paragraph{Open\_inventory}
-def open\_inventory(self, inventory)
-Описание метода:  метод отвечающий за вывод содержимого поля act\_inventory на экран.
-\paragraph{Open\_list\_spells}
-def open\_list\_spells(self, spells):
-Описание метода: метод отвечающий за вывод содержимого поля act\_list\_spells на экран.
-\paragraph{Target\_use\_spell}
-def target\_use\_spell(self, obj =Spell(), tar = Actor()):
-Описание метода: метод отвечающий за вызов метода cast\_spell экземпляра класса Spell.
-\paragraph{Target\_use\_item}
-def target\_use\_item(self, obj =Item(), tar = Actor()):
-Описание метода: метод отвечающий за вызов метода use\_item экземпляра класса Item.	
+\paragraph{update}
+def update(self)
+Описание метода: изменяет координаты и состояние персонажа.
+\paragraph{search\_position}
+def search\_position(self, new\_x, new\_y)
+Описание метода:  Изменяет направление движения у персонажа.
+\paragraph{stop\_move}
+def stop\_move(self):
+Описание метода: Останавливает движение персонажа.
+
+\subsection{Adnd\_actor(Actor)}
+\subsubsection{Описание модуля}
+\paragraph{Конструктор и поля модуля}
+def \_\_init\_\_(self, x, y, z, **params)
+\begin{itemize}
+	\item super().\_\_init\_\_(x, y, z, **params)
+	\item self.on\_click = self.click
+	\item событие по клику на персонажа
+\end{itemize}
+\subsubsection{Методы}
+\paragraph{click}
+def click(self)
+Описание метода: вызывается при клике на персонажа.
+\paragraph{attack}
+def attack(self, actor)
+Описание метода: совершает атаку по actor.
+\paragraph{update}
+def update(self)
+Описание метода: обновляет состояние персонажа.
+
+\subsection{Rectangle}
+\subsubsection{Описание модуля}
+\paragraph{Конструктор и поля модуля}
+def \_\_init\_\_(self, x, y, width, height)
+\begin{itemize}
+	\item self.x = x
+	\item координата x прямоугольника
+	\item self.y = y
+	\item координата y прямоугольника
+	\item self.width = width
+	\item ширина прямоугольника
+	\item self.height = height
+	\item высота прямоугольника
+\end{itemize}
+\subsubsection{Методы}
+\paragraph{is\_in}
+def is\_in(self, rect)
+Описание метода: Проверяет, входит ли прямоугольник self в прямоугольник rect
+\paragraph{is\_point\_inside}
+def is\_point\_inside(self, target\_x, target\_y)
+Описание метода: Проверяет, входит ли точка (x, y) в данный прямоугольник
+
+\subsection{Portal(Object)}
+\subsubsection{Описание модуля}
+\paragraph{Конструктор и поля модуля}
+def \_\_init\_\_(self, x, y, width, height, area, team\_x, team\_y)
+\begin{itemize}
+	\item self.states = None
+	\item состояние портала
+	\item self.sprite = None
+	\item спрайт портала
+	\item self.category = 'portal'
+	\item категория портала
+	\item super().\_\_init\_\_(x, y, 0)
+	\item self.rectangle = Rectangle(x, y, width, height)
+	\item прямоугольник портала
+	\item self.area = area
+	\item текущая зона
+	\item self.team\_x = team\_x
+	\item координата x в новой зоне в которую установят команду
+	\item self.team\_y = team\_y
+	\item координата y в новой зоне в которую установят команду
+	\item self.visible = False
+	\item видимость портала
+\end{itemize}
+\subsubsection{Методы}
+\paragraph{actor\_in}
+def actor\_in(self, actor)
+Описание метода: Проверяет находится ли персонаж внутри портала
 
 \subsection{Spell}
 \subsubsection{Описание модуля}
