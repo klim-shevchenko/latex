@@ -78,248 +78,480 @@ Python –  высокоуровневый язык программирован
 Библиотека Tkinter предоставляет мощные инструменты для создания графических пользовательских интерфейсов на языке Python. Реализация таймеров на Python может быть достигнута с помощью модулей \texttt{time} или \texttt{threading}, в зависимости от конкретных требований приложения.
 
 \subsection{Описание платформы для создания RPG игр}
-Клиент создает модуль содержащий методы модуля RPGGame, например BaldursGateGame. В этом модуле мы создаем мир игры, с помощью new\_actor, new\_item, new\_spell. Мы можем вызывать их много раз с разными параметрами, или загрузить параметры для этих функций из файла. После чего у нас есть персонажи и предметы. Мир также состоит из зон (Area). Каждая зона включает в себя графику, персонажи и предметы и сценарии взаимодействия. Исключение составляет команда PC, которая может перемещаться из зоны в зону (это мы программируем у клиента). Команду мы тоже определяем стартовую и впоследствии можем менять (add\_actor\_to\_team, remove\_actor\_from\_team). Каждому персонажу и предмету может соответствовать пользовательский сценарий (он активируется при нажатии мышкой на объект). Сценарий может включать диалог, взятие предмета, добавление персонажа в команду, квест и т.д.
+Клиент создает модуль содержащий методы модуля RPGGame, например bggame. В этом модуле мы создаем мир игры, с помощью new\_actor. Мы можем вызывать их много раз с разными параметрами, или загрузить параметры для этих функций из файла. После чего у нас есть персонажи и предметы. Мир также состоит из зон (Area). Каждая зона включает в себя графику, персонажи и предметы и сценарии взаимодействия. Исключение составляет команда PC, которая может перемещаться из зоны в зону (это мы программируем у клиента). Команду мы тоже определяем стартовую и впоследствии можем менять (add\_actor\_to\_team, remove\_actor\_from\_team). Каждому персонажу и объекту может соответствовать пользовательский сценарий (он активируется при нажатии мышкой на объект). Сценарий может включать диалог, взятие предмета, добавление персонажа в команду, квест и т.д.
 Зона тоже может содержать сценарий, который запускается когда команда попадает в зону.
 Клиентский класс (BGGame) также содержит глобальные переменные, определяющие ситуации в игре (например квесты). Локальные переменные могут быть в зоне.
 
 Как программируются зоны. Если нужны локальные переменные (состояние локальных событий), то тогда нужно создавать класс своей зоны как наследник от Area. Или же просто использовать класс Area. Добавляем зону в игру new\_area(name, area). Переключаем зону - set\_area(name). Глобальные сценарии находятся в классе игры (BGGame), мы подключаем их как :
 Area.set\_enter\_script(script)
 В зону мы добавляем персонажей и предметы как add\_object(x,y, obj) - z не нужно, так как слой можно определить по y координате.
-На объект мы добавляем сценарий для взаимодействия как: obj.set\_click\_script(script)
+В конкретную зону мы добавляем сценарий для взаимодействия как: Game.game.start\_script(script, name)
 Как происходит переход команды между зонами.
-В зоне определяем объект дверь, по клику мыши она может открываться и закрываться (меняется состояние объекта). Назначаем сценарий set\_walk\_script(script), который срабатывает когда кто-то из команды пересекает объект. В этом сценарии мы меняем зону на нужную (set\_area), и устанавливаем команду в нужную позицию (set\_team). В другой зоне делается аналогично, только переход и позиция будут другими.
-Сценарии - это потоки которые запускаются параллельно (метод RPGGame.start\_script(script)). Сценарий может быть остановлен (stop\_thread).
+В зоне определяем объект дверь, по клику мыши она может открываться и закрываться (меняется состояние объекта). Назначаем сценарий walk\_script(script), который срабатывает когда кто-то из команды пересекает объект. В этом сценарии мы меняем зону на нужную (set\_area), и устанавливаем команду в нужную позицию (set\_team). В другой зоне делается аналогично, только переход и позиция будут другими.
+Сценарии - это потоки которые запускаются параллельно (метод RPGGame.start\_script(script)). Сценарий может быть остановлен (stop\_script(name)).
 Таким образом, мир будет интерактивным.
 Как связано окно и графика с игрой. В окне мы делаем таймер, который вызывает метод update нашей игры (BGGame). Этот метод выполняет все действия объектов в игре за 1 кадр времени.
 Также в таймере вызываем Graphics.update(), который обновляет графику игры.
 Все объекты (Actor, Item) должны иметь состояния (как минимум одно). Каждое состояние связано с спрайтом (или анимацией). То есть переключение состояния меняет графику объекта.
 
-А вообще сценарии и глобальные переменные могут быть без классов, а просто в модулях, так проще, чтобы к ним был доступ из всех комнат. Тогда и функции движка должны быть доступны везде (то есть во всех сценариях). Например делаем модуль лес (forest):
-from rpg.game import *
-from rpg.area import Area
-forest = Area()
-forest.add\_sprite(0, 0, 0, Sprite("back.jpg"))
-sword = Sword(normal: Sprite("sword.jpg"))
-forest.add\_object(10, 10, sword)
-forest.add\_sprite(0, 0, 0, Sprite("brown.jpg"))
-door = Door(normal: Sprite("door.jpg"))
-forest.add\_object(50, 50, door)
-man = ManNPC(left: Animation("left.jpg"), right: Animation("right.jpg"))
-player = PlayerPC(left: Animation("left.jpg"), right: Animation("right.jpg"))
-forest.add\_object(100, 100, man)
-forest.add\_object(150, 132, player)
+А вообще сценарии и глобальные переменные могут быть без классов, а просто в модулях, так проще, чтобы к ним был доступ из всех комнат. Тогда и функции движка должны быть доступны везде (то есть во всех сценариях). Например делаем модуль руины (ruins):
+import random
+from math import sqrt
+import time
+from rpg.area import *
+from rpg.sprite import *
+from rpg.rectangle import *
+from rpg.game import Game
+from rpg.portal import Portal
 
-def man\_dialog():
-...
+class Ruins(Area):
+def \_\_init\_\_(self):
+'''
+Класс игровой зоны Ruins
 
-man.set\_click\_script(man\_dialog)
-new\_area("Forest", forest)
+'''
+super().\_\_init\_\_()
+self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
+self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
+from grunt import Grunt
+self.grunt = Grunt(0,0,0)
+from footman import Footman
+self.footman = Footman(0,0,0)
+self.add\_object(self.footman, 120, 120, 1)
+self.add\_object(self.grunt, 500, 185, 1)
+p = Portal(400, 400, 200, 200, 'Village', 480, 100)
+self.add\_object(p, p.pos\_x, p.pos\_y, 100)
+Game.game.start\_script(self.ai, "ai", self.grunt)
+Game.game.start\_script(self.walk\_two, "footman", 50, 50)
 
-lair = Area()
-lair.add\_sprite(0, 0, 0, Sprite("green.jpg"))
-knife = Knife(normal: Sprite("knife.jpg"))
-lair.add\_object(60, 80, knife)
-bandit = EnemyNPC(left: Animation("left.jpg"), right: Animation("right.jpg"))
-player = PlayerPC(left: Animation("left.jpg"), right: Animation("right.jpg"))
-lair.add\_object(100, 100, bandit)
-lair.add\_object(50, 50, player)
 
-new\_area("Bandits lair", lair)
+def walk(self, step\_x, step\_y, actor):
+'''
+Сценарий для движения бугая
+
+:param step\_x: шаг движения x
+:param step\_y: шаг движения y
+'''
+if actor.hp <= 0:
+Game.game.stop\_script("grunt")
+new\_x = 200
+new\_y = 200
+actor.is\_attack = False
+direction = random.choice(["up", "down", "left", "right"])
+if direction == "up":
+new\_y -= step\_y
+new\_x = step\_x
+elif direction == "down":
+new\_y += step\_y
+new\_x = step\_x
+elif direction == "left":
+new\_y = step\_y
+new\_x -= step\_x
+elif direction == "right":
+new\_y = step\_y
+new\_x += step\_x
+
+actor.search\_position(new\_x, new\_y)
+
+time.sleep(2)
 
 модуль bggame:
-from rpg.game import *
-teampc =()
-new\_item("Sword", category: "Weapon", attack: 10)
-new\_actor("ManNPC",  ADnDActor, category: "NPC")
-new\_actor("Bandit",  ADnDActor, category: "enemy")
-new\_actor("PlayerPC" ,ADnDActor, category: "PC")
-add\_actor\_to\_team(PlayerPC, teampc)
+from ruins import *
+import time
+import random
 
-def walk\_script():
-	if (act.x = door.x \&\& act.y = door.y)
-		set\_area("Bandits lair")
-		put\_team(50, 50)
+class BaldursGame(Game):
+def \_\_init\_\_(self, canvas, window, **params):
+'''
+Класс конкретной игры для демонстрации
 
-import forest
-
-set\_area("Forest")
-set\_team(teampc, forest, 100, 100)
-
-
-set\_walk\_script(walk\_script)
-
-import lair
-
-
-Еще надо определиться, как задать правила AD\&D.
-Лучше так: сделать класс ADnDActor (это делает клиент, не движок), где мы перекрываем метод attack, и там программируем формулу расчета повреждения, уменьшаем hp и т.д.
-То есть Actor.attack(actor), где actor - кого атакуют
-Тогда надо в методе new\_actor указывать еще один параметр - базовый класс, от которого будет наследование.
-Пример.
-new\_actor("Knight", ADnDActor, category: "enemy", ...)
-С магией можно сделать так:
-абстрактный класс Spell, где есть метод cast(actor1, actor2), то есть actor1 делает cast на actor2. он изначально пустой. А в new\_spell мы должны указать функцию как именно должен работать Spell (можно прямо как lambda):
-new\_spell("Fireball", level:3, class: ["wizard", "priest"], lambda a1,a2 : a2.hp -= 30)
-проверку на класс (который требуется) можно изначально сделать в Spell
-
+:param canvas: класс графической системы
+:param window: окно на которое будет выводится игра
+'''
+super().\_\_init\_\_(canvas, window, **params)
+from mage import Mage
+self.add\_pc\_to\_team(Mage(0, 0, 0))
+self.new\_area('Ruins', Ruins())
+self.set\_area('Ruins')
+self.set\_team(500, 300, 100)
+self.timer()
 
 \subsubsection{Пример клиентского кода игры}
 \paragraph{Cоздание классов персонажей/предметов}
-Клиент создает модуль содержащий методы модуля RPGGame, например BaldursGateGame. В этом модуле клиент создаем мир игры, с помощью new\_actor, new\_item, new\_spell. 
+Клиент создает модуль содержащий методы модуля RPGGame, например BaldursGateGame. В этом модуле клиент создаем мир игры, с помощью new\_actor. 
 
 модуль bggame:
-from rpg.game import *
-teampc =()
-new\_item("Sword", category: "Weapon", attack: 10)
-new\_actor("ManNPC", ADnDActor, category: "NPC")
-new\_actor("Bandit",  ADnDActor, category: "enemy")
-new\_actor("PlayerPC", ADnDActor, category: "PC")
-new\_spell("Fireball", level:3, class: ["wizard", "priest"], lambda a1,a2 : a2.hp -= 30)
-pc = PlayerPC()
-add\_actor\_to\_team(pc)
+from ruins import *
+import time
+import random
+
+class BaldursGame(Game):
+def \_\_init\_\_(self, canvas, window, **params):
+'''
+Класс конкретной игры для демонстрации
+
+:param canvas: класс графической системы
+:param window: окно на которое будет выводится игра
+'''
+super().\_\_init\_\_(canvas, window, **params)
+from mage import Mage
+self.add\_pc\_to\_team(Mage(0, 0, 0))
+self.new\_area('Ruins', Ruins())
+self.set\_area('Ruins')
+self.set\_team(500, 300, 100)
+self.timer()
 
 \paragraph{Задание правил атаки}
-Пользователь создаёт класс ADnDActor, наследник от класса Actor в своём модуле bggame, в нём он прописывает свои правила по которым происходит атака. То есть Actor.attack(actor), где actor - кого атакуют
-Тогда надо в методе new\_actor указывать еще один параметр - базовый класс, от которого будет наследование.
-Пример.
+Пользователь создаёт класс ADnDActor, наследник от класса Actor в своём модуле bggame, в нём он прописывает свои правила по которым происходит атака. То есть Actor.attack(self, actor), где actor - кого атакуют.
+Пример:
 
-модуль bggame:
-from rpg.game import *
-from rpg.area import Actor	
+модуль adnd\_actor:
+from math import sqrt
+from rpg.actor import Actor
+from rpg.animation import Animation
+import rpg.game
+import time
 
-class ADnDActor(Actor)
-def \_\_init\_\_(self, **params)
-ADnD\_min\_disctans
+class Adnd\_actor(Actor):
 
-def attack(actor):
+ATTACK\_RANGE = 50
 
-	mod\_attack = self.str \% 10
-	hit = randrange(1,20) + mod\_attack
-	damage = randrange(1, weapon) + mod\_attack
-	if (abc(self.x - actor.x) <= weapon\_min\_distance \&\& abc(self.y - actor.y) <= weapon\_min\_distance)
-		if (hit >= obj.ac)
-		actor.hp -= damage
-		if actor.hp <= 0)
-			actor.alive = false
-			start\_script("death", self.death\_script, actor)\\
-			stop\_script("death")
+def \_\_init\_\_(self, x, y, z, **params):
+'''
+Класс Adnd\_actor содержащий основные механики взаимодействия с другими персонажами
 
-def death\_script(actor)
-	actor.status = "death" % возможно правильнее self.cateory = "death"
-	actor.add\_anim("death")
-	actor.status = "corspe" % возможно правильнее self.cateory = "corspe"
+:param x: координата x
+:param y: координата y
+:param z: координата z
+'''
+super().\_\_init\_\_(x, y, z, **params)
+self.on\_click = self.click
 
-new\_actor("Knight", ADnDActor, category: "enemy", ...)
+def click(self):
+'''
+вызывается при клике на персонажа
 
-\paragraph{Создание заклинаний с их действием}
-Создание заклинаний с их действием. С магией можно сделать так: абстрактный класс Spell, где есть метод cast(actor1, actor2), то есть actor1 делает cast на actor2. он изначально пустой. А в new\_spell мы должны указать функцию как именно должен работать Spell (можно прямо как lambda):
+'''
+pc = rpg.game.Game.game.team\_of\_pc[0]
+if pc == self:
+return
+dx = pc.pos\_x - self.pos\_x
+dy = pc.pos\_y - self.pos\_y
+dist = sqrt(dx * dx + dy * dy)
+if dist <= self.ATTACK\_RANGE:
+pc.is\_attack = True
+pc.attack(self)
+time.sleep(0.125)
+if self.hp <=0:
+pc.is\_attack = False
 
-модуль bggame:
-from rpg.game import *
-from rpg.area import Spell
+def attack(self, actor):
+'''
+совершает атаку по actor
 
-new\_spell("Fireball", level:3, class: ["wizard", "priest"], lambda a1,a2 : a2.hp -= 30)
+:param actor: персонаж, которого атакуют
+'''
+actor.hp -= self.damage
+def update(self):
+'''
+обновляет состояние персонажа
+
+'''
+super().update()
+if self.hp <= 0:
+self.stop\_move()
+self.set\_state('death')
+
 
 \paragraph{Создание зон, заполнение их персонажами/объектами}
 Мир также состоит из зон (Area). Каждая зона включает в себя графику, персонажи и предметы и сценарии взаимодействия. Исключение составляет команда PC, которая может перемещаться из зоны в зону (это мы программируем у клиента). Как программируются зоны. Если нужны локальные переменные (состояние локальных событий), то тогда нужно создавать класс своей зоны как наследник от Area. Или же просто использовать класс Area. Добавляем зону в игру new\_area(name, area). Переключаем зону - set\_area(name). Так же требуется задать область движения, её проще сделать как совокупность прямоугольников, за которые персонажи не могут выйти. Эти прямоугольники должны касаться друг друга, но не пересекаться. Тогда алгоритм проверки выхода несложный: выход за пределы области только тогда, когда прямоугольник персонажа пересек сторону (одну или две) одного из прямоугольников области, эта сторона не является касательной.
 
-from rpg.game import *
-from rpg.area import Area
-forest = Area()
-forest.add\_sprite(0, 0, 0, Sprite("back.png"))
-sword = Sword(normal: Sprite("sword.jpg"))
-forest.add\_object(10, 10, sword)
-forest.add\_sprite(0, 0, 0, Sprite("brown.png"))
-door = Door(normal: Sprite("door.png"))
-forest.add\_object(50, 50, door)
-man = ManNPC(left: Animation("left.png"), right: Animation("right.png"))
-player = PlayerPC(left: Animation("left.png"), right: Animation("right.png"))
-forest.add\_object(100, 100, man)
-forest.add\_object(150, 132, player)
+import random
+from math import sqrt
+import time
+from rpg.area import *
+from rpg.sprite import *
+from rpg.rectangle import *
+from rpg.game import Game
+from rpg.portal import Portal
 
-def man\_dialog():
-...
+class Ruins(Area):
+def \_\_init\_\_(self):
+'''
+Класс игровой зоны Ruins
 
-man.set\_click\_script(man\_dialog)
-new\_area("Forest", forest)
+'''
+super().\_\_init\_\_()
+self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
+self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
+from grunt import Grunt
+self.grunt = Grunt(0,0,0)
+from footman import Footman
+self.footman = Footman(0,0,0)
+self.add\_object(self.footman, 120, 120, 1)
+self.add\_object(self.grunt, 500, 185, 1)
+p = Portal(400, 400, 200, 200, 'Village', 480, 100)
+self.add\_object(p, p.pos\_x, p.pos\_y, 100)
+Game.game.start\_script(self.ai, "ai", self.grunt)
+Game.game.start\_script(self.walk\_two, "footman", 50, 50)
+
+
+def walk(self, step\_x, step\_y, actor):
+'''
+Сценарий для движения бугая
+
+:param step\_x: шаг движения x
+:param step\_y: шаг движения y
+'''
+if actor.hp <= 0:
+Game.game.stop\_script("grunt")
+new\_x = 200
+new\_y = 200
+actor.is\_attack = False
+direction = random.choice(["up", "down", "left", "right"])
+if direction == "up":
+new\_y -= step\_y
+new\_x = step\_x
+elif direction == "down":
+new\_y += step\_y
+new\_x = step\_x
+elif direction == "left":
+new\_y = step\_y
+new\_x -= step\_x
+elif direction == "right":
+new\_y = step\_y
+new\_x += step\_x
+
+actor.search\_position(new\_x, new\_y)
+
+time.sleep(2)
+
+модуль bggame:
+from ruins import *
+import time
+import random
 
 \paragraph{Пример сценариев: переход между зонами}
 Глобальные сценарии находятся в классе игры (BGGame), мы подключаем их как :
 Area.set\_enter\_script(script)
-На объект мы добавляем сценарий для взаимодействия как: obj.set\_click\_script(script)
 Как происходит переход команды между зонами.
-В зоне определяем объект дверь, по клику мыши она может открываться и закрываться (меняется состояние объекта). Назначаем сценарий set\_walk\_script(script), который срабатывает когда кто-то из команды пересекает объект. В этом сценарии мы меняем зону на нужную (set\_area), и устанавливаем команду в нужную позицию (set\_team). В другой зоне делается аналогично, только переход и позиция будут другими.
-Сценарий перехода - в модуле зоны, и там не нужны проверки координат, потому что сработает движок на пересечение объекта. Нужен какой-то объект (нора, дверь ...) на который назначается walk\_script
-А в самом сценарии просто меняем зону и переставляем команду put\_team(50, 50) (команда в движке)
+В зоне определяем объект портал, по клику мыши когда персонаж заходит внутрь портала срабатывает self.actor\_in(self, actor). При создании портала, мы указываем кудаи в какую зону разместить команду персонажей.
 
-модуль bggame:
-from rpg.game import *
+from rpg.object import Object
+from rpg.game import Game
+from rpg.rectangle import Rectangle
 
-def walk\_script():
-	if (act.x = door.x \&\& act.y = door.y)
-		set\_area("Bandits lair")
-		put\_team(50, 50)
+class Portal(Object):
+def \_\_init\_\_(self, x, y, width, height, area, team\_x, team\_y):
+''' 
+Создает портал в новую зону
 
-import forest
+:param x: координата x портала
+:param y: координата y портала
+:param width: ширина портала
+:param height: высота портала
+:param area: имя зоны куда будет переход
+:param team\_x: местоположение команды в новой зоне
+:param team\_y: местоположение команды в новой зоне
+'''
+self.states = None
+self.sprite = None
+self.category = 'portal'
+super().\_\_init\_\_(x, y, 0)
+self.rectangle = Rectangle(x, y, width, height)
+self.area = area
+self.team\_x = team\_x
+self.team\_y = team\_y
+self.visible = False
 
-set\_area("Forest")
-set\_team(teampc, forest, 100, 100)
+def actor\_in(self, actor):
+'''
+Проверяет находится ли персонаж внутри портала
 
+:param actor: проверяемый персонаж
+'''
+if actor.category == "pc":
+Game.game.set\_area(self.area)
+Game.game.set\_team(self.team\_x, self.team\_y, 100)
+actor.stop\_move()
 
-set\_walk\_script(walk\_script)
+модуль ruins
+import random
+from math import sqrt
+import time
+from rpg.area import *
+from rpg.sprite import *
+from rpg.rectangle import *
+from rpg.game import Game
+from rpg.portal import Portal
 
-import lair
+class Ruins(Area):
+def \_\_init\_\_(self):
+'''
+Класс игровой зоны Ruins
 
-%set\_area("Bandits lair")
-%put\_team(teampc, lair, 50, 50)
+'''
+super().\_\_init\_\_()
+self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
+self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
+from grunt import Grunt
+self.grunt = Grunt(0,0,0)
+from footman import Footman
+self.footman = Footman(0,0,0)
+self.add\_object(self.footman, 120, 120, 1)
+self.add\_object(self.grunt, 500, 185, 1)
+p = Portal(400, 400, 200, 200, 'Village', 480, 100)
 
 \paragraph{Как будет идти бой}
-Боевая система - я предполагаю, что боевая система будет пошаговая. То есть Существует боевая ситуация, которая активируется триггером. В мирном состоянии пользователь управляя персонажем PC может передвигаться свободно, на любые расстояния преодолевая препятствия. Другие NPC тоже будут передвигаться спокойно передвигаться согласно их скриптам. Боевая ситуация активируется только в случае, если PC будет входить в зону видимости NPC category: enemy. Я добавлю NPC "прямоугольник" размером 60 на 60 пикселей, от точки NPC на карте, который проверяет есть ли в площади этого "прямоугольника" координаты игрока. В случае когда координаты игрока попадают в этот прямоугольник, то начинается боевая ситуация. Либо сделать по-другому, при попадании в новую зону команды PC, если в этой зоне есть NPC category: enemy, то начинается скрипт set\_battle\_script(script)"боевая ситуация" начинается сразу же. Боевая ситуация будет представлять из себя следующее:
-Очередь: все персонажи будут совершать все действия по очереди. Будет список в котором отсортированны по значению параметра agility все персонажи, которые участвуют в боевой ситуации в конкретной зоне. Будет у всех участников флаг, который активен, только когда имя того персонажа, находится вверху списка. Список будет обновляться после совершения любого действия. После совершения действия имя персонажа в списке переносится в конец списка, у персонажа отключается флаг хода, а в начало списка переносится следующий элемент в списке, при смерти персонажа, его имя удаляется из списка.
-Действия NPC: Я предполагаю, что поведение NPC в боевой ситуации, определяется скриптами написанными пользователем специально для боя. Т.е. пользователь пишет свой battle\_script для каждого экземпляра класса ADndActor. Скрипт будет вызывать методы передвижения или атаки в зависимости от того как должен вести себя каждый NPC category: enemy. Т.е. у условного скелета скрип будет вызывать метод skeleton.attack(actor) по возможности, если его нецелесообразно использовать(расстояние не позволяет совершать метод attack), то вызывать skeleton.move(x,y). У условного ящера скрипт будет будет вызывать метод lizardman.move(x,y) чтобы увеличить расстояние, а когда оно будет больше 100 единиц по модулю, то только после этого будет вызываться метод lizardman.attack(actor), потому что ящер стреляет из лука, а это значит расстояние для атаки у него больше, чем у того-же скелета. Таким образом все действия NPC определяются заранее написанными скриптами. Но я пока не представляю, как задать эти скрипты В модуле bggame наверное или в каждом экземпляре класса ADndActor. Я не уверен.
-Окончание боевой ситуации: бой заканчивается, когда в списке очереди, остаётся одно имя или вообще никаких, скрип перестаёт действовать (stop\_thread).
+Бой будет совершаться с помощью сценариев. У класса Adnd\_actor есть метод attack(self, actor), который уменьшает текущее количество здоровья у actor. В модуле game существуют методы start\_script(script, name), stop\_script(name). С помощь сценариев возможно запускать параллельные потоки. В конкретную зону будет добавляться сценарий 'ai', в который передаётся конкретный персонаж. В этом сценарии указывается поведение противника, Что он должен сближаться с персонажем игрока, и когда расстояние до атаки будет достаточным, чтобы её совершить, будет вызван метод actor.attack. Для того, чтобы пользователь мог атаковать персонажа, у каждого экземпляра класса adnd\_actor есть метод click(self), который вызывает проверку условия, если персонаж близко к персонажу игрока, хранящемуся в rpg.game.Game.team\_of\_pc, то вызвать у pc=rpg.game.Game.team\_of\_pc[0], attack(self)/
+Пример:
+модуль adnd\_actor:
+from math import sqrt
+from rpg.actor import Actor
+from rpg.animation import Animation
+import rpg.game
+import time
 
-Тут надо делать разные сценарии. Собственно начало боя - это тоже сценарий (зашел в комнату, сработал walk\_script на что-то (или enter\_script - сценарий, который запускается при входе команды в зону). Условно этот сценарий называется battle\_script. Там мы прописываем правила боя (может достаточно только установить глобальный режим боя и проверять условие окончания боя). Пошаговый, значит в определенный момент мы выключаем управление игрока (обработку мыши, клавиш) - control\_off(), а затем опять включаем control\_on(). Когда наш ход, мы должны считать очки движения/действий. Это может делать сценарий по событию движения персонажа (move\_script - тоже может быть один на всех: и своих и врагов).
-click\_script - сценарий по нажатию на врагов, делает атаку, если позволяет расстояние. Причем, это делается только если режим боя (то есть установлена глобальная переменная). Когда очки закончились (или нажата кнопка конец хода), то мы запускаем enemy\_script, который выключает управление игрока и по очереди запускает сценарии ai у врагов. Все сценарии работают параллельно (хотя реально работает только один сценарий в определенный момент времени), и в Питоне они должны передавать управление друг другу, это команда движка yield(есть примеры в Интернете как это сделать).
+class Adnd\_actor(Actor):
 
-модуль bggame:
-from rpg.game import *
-actors\_list =()
-def battle\_script(**params)
-	actors\_list = (params)
-	action\_points = 2
-	While (actors\_list.len > 1)
-		if (actor\_1.agi >= actor\_2.agi)
-			yield actor\_1.click\_script()
-		if (actor\_2.agi > actor\_1.agi)
-		yield actor\_2.enemy\_script()
-	stop\_script()
-def click\_script(self, actor)
-	 self.attack(actor)
-	 self.move\_script()
-	 self.control\_off()
-	 if (actor.status = "corspe")
-	 	actors\_list.remove(actor)
-def enemy\_script(self)
-	if (self.attack(actor) \&\& actor.distance <= self\_weapon\_min\_distance)
-		yield self.attack(actor)
-	if (self.move\_script() \&\& actor.distance > self\_weapon\_min\_distance)
-		yield self.move\_script()
-	actor.control\_on()
-	if (actor.status = "corspe")
-		actors\_list.remove(actor)
-def move\_script(self)
-	self.move(point)
+ATTACK\_RANGE = 50
 
-lair.battle\_script(player, bandit)
+def \_\_init\_\_(self, x, y, z, **params):
+'''
+Класс Adnd\_actor содержащий основные механики взаимодействия с другими персонажами
 
-\paragraph{Сценарии с диалогами}
-NPC category: friend будут при клике на них вызывать сценарий, который будет вызвать окно в котором будет поле, содержащее текст прописанный этим скриптом. 
+:param x: координата x
+:param y: координата y
+:param z: координата z
+'''
+super().\_\_init\_\_(x, y, z, **params)
+self.on\_click = self.click
 
-def man\_say\_text():
-...
+def click(self):
+'''
+вызывается при клике на персонажа
 
-man.set\_click\_script( man\_say\_text)
+'''
+pc = rpg.game.Game.game.team\_of\_pc[0]
+if pc == self:
+return
+dx = pc.pos\_x - self.pos\_x
+dy = pc.pos\_y - self.pos\_y
+dist = sqrt(dx * dx + dy * dy)
+if dist <= self.ATTACK\_RANGE:
+pc.is\_attack = True
+pc.attack(self)
+time.sleep(0.125)
+if self.hp <=0:
+pc.is\_attack = False
+
+def attack(self, actor):
+'''
+совершает атаку по actor
+
+:param actor: персонаж, которого атакуют
+'''
+actor.hp -= self.damage
+def update(self):
+'''
+обновляет состояние персонажа
+
+'''
+super().update()
+if self.hp <= 0:
+self.stop\_move()
+self.set\_state('death')
+
+модуль ruins
+import random
+from math import sqrt
+import time
+from rpg.area import *
+from rpg.sprite import *
+from rpg.rectangle import *
+from rpg.game import Game
+from rpg.portal import Portal
+
+class Ruins(Area):
+def \_\_init\_\_(self):
+'''
+Класс игровой зоны Ruins
+
+'''
+super().\_\_init\_\_()
+self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
+self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
+from grunt import Grunt
+self.grunt = Grunt(0,0,0)
+from footman import Footman
+self.footman = Footman(0,0,0)
+self.add\_object(self.footman, 120, 120, 1)
+self.add\_object(self.grunt, 500, 185, 1)
+p = Portal(400, 400, 200, 200, 'Village', 480, 100)
+self.add\_object(p, p.pos\_x, p.pos\_y, 100)
+Game.game.start\_script(self.ai, "ai", self.grunt)
+Game.game.start\_script(self.walk\_two, "footman", 50, 50)
+
+
+def walk(self, step\_x, step\_y, actor):
+'''
+Сценарий для движения бугая
+
+:param step\_x: шаг движения x
+:param step\_y: шаг движения y
+'''
+if actor.hp <= 0:
+Game.game.stop\_script("grunt")
+new\_x = 200
+new\_y = 200
+actor.is\_attack = False
+direction = random.choice(["up", "down", "left", "right"])
+if direction == "up":
+new\_y -= step\_y
+new\_x = step\_x
+elif direction == "down":
+new\_y += step\_y
+new\_x = step\_x
+elif direction == "left":
+new\_y = step\_y
+new\_x -= step\_x
+elif direction == "right":
+new\_y = step\_y
+new\_x += step\_x
+
+actor.search\_position(new\_x, new\_y)
+
+def ai(self, actor):
+'''
+скрипт противников
+
+:param step\_x: размер шага x до персонажа игрока
+:param step\_y: размер шага x до персонажа игрока
+:param actor: персонаж противник
+'''
+if actor.hp <= 0:
+Game.game.stop\_script("ai")
+import rpg.game
+pc = rpg.game.Game.game.team\_of\_pc[0]
+new\_x = pc.pos\_x
+new\_y = pc.pos\_y
+
+actor.search\_position(new\_x, new\_y)
+dx = pc.pos\_x - actor.pos\_x
+dy = pc.pos\_y - actor.pos\_y
+dist = sqrt(dx * dx + dy * dy)
+if dist <= actor.ATTACK\_RANGE:
+actor.is\_attack = True
+actor.attack(pc)
+time.sleep(1)
+if pc.hp <=0:
+actor.update()
+Game.game.stop\_script("ai")
+Game.game.start\_script(self.walk, "grunt", 50, 50, actor)
+
+else:
+actor.is\_attack = False
+time.sleep(2)
 
 \paragraph{Соединение движка и окон tkinter}
 Модуль graphics содержит в себе библиотеку tkinter . Класс Graphics внутри модуля является наследником tk.Canvas. Этот класс взаимодействует с окном root = tk.TK() в программном модуле пользователя. Модуль sprite тоже взаимодействует с tkinter. Изображение для спрайта берётся с помощью метода tk.PhotoImage(file=name)
@@ -328,63 +560,190 @@ man.set\_click\_script( man\_say\_text)
 
 import tkinter as tk
 class Sprite:
-"""Класс спрайта для работы с изображениями на Canvas."""
+
 def \_\_init\_\_(self, image):
+'''
+Класс спрайта для работы с изображениями на Canvas
+
+:param image: адресс изображения который
+'''
 self.image = tk.PhotoImage(file=image)
 self.tag = None
 self.x = 0
 self.y = 0
 self.z = 0
 
+def set\_tag(self, tag):
+'''
+Устанавливает тег спрайта
+
+:param tag: тег спрайта
+'''
+self.tag = tag
+
+def set\_z(self, z):
+'''
+Устанавливает z-координату спрайта
+
+:param z: координата z
+'''
+self.z = z
+
+def get\_tag(self):
+'''
+Возвращает тег спрайта
+
+'''
+return self.tag
+
+def set\_coords(self, new\_x, new\_y):
+'''
+Обновляет координаты спрайта
+
+:param new\_x: координата x
+:param new\_y: координата y
+'''
+if self.tag:
+self.x = new\_x
+self.y = new\_y
+def update(self):
+'''
+Обновляет анимацию спрайта
+
+'''
+pass
+
 модуль graphics
 
 import tkinter as tk
-import time
+
 class Graphics(tk.Canvas):
-"""Класс Canvas с дополнительными методами для работы со спрайтами."""
+canvas = None
 def \_\_init\_\_(self, master, **kwargs):
+'''
+Класс с методами для работы со спрайтами
+
+'''
 super().\_\_init\_\_(master, **kwargs)
-self.sprites = []  \# список спрайтов
-self.mouse = None
+self.sprites = []  # список спрайтов
+Graphics.canvas = self
 
 def add\_sprite(self, sprite, x, y, z, **kwargs):
-"""Добавляет спрайт на Canvas.
-param sprite - экземпляр спрайта, x y z - коодринаты."""
+'''
+Добавляет спрайт на Canvas
+
+:param sprite: спрайт
+:param x: координата x
+:param y: координата y
+:param z: координата z
+:param kwargs: параметры относящиеся к конкретному изображению в tkinter
+'''
 tag = self.create\_image(x, y, image=sprite.image, anchor='center', **kwargs)
 sprite.set\_tag(tag)
-sprite.set\_z(z)  \# устанавливаем z-координату спрайта
+sprite.set\_z(z)
 sprite.x = x
 sprite.y = y
 self.sprites.append(sprite)
-self.sprites.sort(key=lambda sprite: sprite.z) \# сортировка спрайтов по z-координате
+self.sprites.sort(key=lambda sprite: sprite.z)
+
+def update(self):
+'''
+Перерисовывает все спрайты
+
+'''
+for sprite in self.sprites:
+sprite.update()
+self.tag\_raise(sprite.get\_tag())
+self.coords(sprite.get\_tag(), sprite.x, sprite.y)
+self.itemconfig(sprite.get\_tag(), image=sprite.image)
+
+
+def change\_sprite(self, sprite, new\_sprite):
+'''
+Меняет  спрайт на новый.
+
+:param sprite: экземпляр спрайта
+:param new\_sprite: новый спрайт
+'''
+old\_sprite\_pos = None
+for i, s in enumerate(self.sprites):
+if s.get\_tag() == sprite.get\_tag():
+old\_sprite\_pos = i
+break
+
+if old\_sprite\_pos is not None:
+old\_tag = sprite.get\_tag()
+
+self.sprites[old\_sprite\_pos] = new\_sprite
+new\_sprite.set\_tag(old\_tag)
+
+new\_sprite.set\_tag(old\_tag)
+new\_sprite.set\_z(sprite.z)
+
+self.tag\_raise(old\_tag)
+self.coords(old\_tag, sprite.x, sprite.y)
+self.itemconfig(old\_tag, image=new\_sprite.image)
+
+def delete\_sprite(self, sprite):
+'''
+Удаляет спрайт с Canvas.
+
+:param sprite: экземпляр спрайта
+:return:
+'''
+self.delete(sprite.get\_tag())
+self.sprites.remove(sprite)
+
+def clear\_all(self):
+'''
+Удаляет все спрайты с Canvas
+
+'''
+for sprite in self.sprites:
+self.delete(sprite.get\_tag())
+self.sprites.clear()
 
 модуль baldursgame '''пользовательский модуль'''
 
-from rpg.sprite import *
-from rpg.game import *
-from rpg.area import *
-from rpg.actor import *
-import datetime
-import threading
+from ruins import *
+from village import *
+import time
+import random
 
-def timer():
-first\_game.update()
-root.after(1000, timer)
+class BaldursGame(Game):
+def \_\_init\_\_(self, canvas, window, **params):
+'''
+Класс конкретной игры для демонстрации
+
+:param canvas: класс графической системы
+:param window: окно на которое будет выводится игра
+'''
+super().\_\_init\_\_(canvas, window, **params)
+from mage import Mage
+self.add\_pc\_to\_team(Mage(0, 0, 0))
+self.new\_area('Ruins', Ruins())
+self.new\_area('Village', Village())
+self.set\_area('Ruins')
+self.set\_team(500, 300, 100)
+self.timer()
+
+модуль main
+from bggame import *
 
 root = tk.Tk()
 root.geometry('1500x1500')
 
 exit\_button = tk.Button(root, text="Exit", fg="red", command=root.destroy)
-exit\_button.pack()
-
-\# Создание экземпляра класса graphics, который будет взаимодействовать с окном
 canvas = Graphics(root, width=1500, height=1500)
+Graphics.canvas = canvas
 
-\# Загрузка изображения
-im1\_1 = Sprite('images/fon1.png')
-im1\_2 = Sprite('images/fon2.png')
-im2\_1 = Sprite('images/person1.png')
-im2\_2 = Sprite('images/person2.png')
+BaldursGame(canvas, root)
+
+canvas.place(height = 1500, width =1500)
+BaldursGame.timer
+
+root.mainloop()
+
 
 \subsection{Модули и классы}
 \subsection{Game}
@@ -701,52 +1060,4 @@ def \_\_init\_\_(self, x, y, width, height, area, team\_x, team\_y)
 \paragraph{actor\_in}
 def actor\_in(self, actor)
 Описание метода: Проверяет находится ли персонаж внутри портала
-
-\subsection{Spell}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, name, level, type, damage)
-\begin{itemize}
-	\item self.spell\_name = name
-	\item Описание параметра: параметр хранит название конкретного экземпляра класса Spell.
-	\item self.spell\_level = level
-	\item Описание параметра: параметр хранит числовое значение обозначающее уровень у конкретного экземпляра класса Spell.
-	\item self.spell\_type = type
-	\item Описание параметра: параметр хранит текстовое значение, обозначающее принадлежность к определённому типу заклинания (урон, лечение, перемещение) у конкретного экземпляра класса Spell.
-	\item self.spell\_damage = damage
-	\item Описание параметра: параметр хранит числовое значение обозначающее колличество единиц урона, у конкретного экземпляра класса Spell, на которое может быть уменьшено колличество единиц жизни(параметр obj\_hp) у другого экземпляра класса Object.
-
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Cast\_spell}
-def cast\_spell(self. actor1, actor2)
-Описание метода: метод отвечающий за изменение поля obj\_hp экземпляра класса Object на число равное значению поля spell\_damage экземпляра класса Spell.
-\paragraph{Learn\_spell}
-def learn\_spell(self, name, level, list)
-Описание метода: метод отвечающий за добавление в поле act\_list\_spells экземпляра класса Actor нового элемента.
-\paragraph{Forget\_spell}
-def def forget\_spell(self, name, level, list)
-Описание метода: метод отвечающий за удаление из поля act\_list\_spells экземпляра класса Actor первого элемента.
-
-\subsection{Item}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, name, category, type, ability)
-\begin{itemize}
-	\item self.it.category = category 
-	\item Описание параметра: параметр хранит текстовое значение, обозначающее принадлежность к определённой категории предмета (оружие, доспех, магический предмет, прочее) у конкретного экземпляра класса Item.
-	\item self.it.type = type 
-	\item Описание параметра: параметр хранит текстовое значение, обозначающее принадлежность к определённому типу предмета, которое он может занимать в инвентаре (голова, одна рука, две руки, доспех, ноги, обувь, прочее) у конкретного экземпляра класса Item.
-	\item self.it.ability = ability % сопособности предмета(доспех увеличивает класс доспеха, свиток новое заклинание и т.д.)
-	\item Описание параметра: параметр хранит текстовое значение, обозначающее особенность (доспех, изменяет значение параметра obj\_ac у конкретного экземпляра класса Object, оружие изменяет значение параметра obj\_damage у конкретного экземпляра класса Object, магический предмет добавляет новый экземпляр класса Spell, в список act\_list\_spells конкретного экземпляра класса Actor, прочее, не изменяет параметров, но содержит текст, который будет выводится на экран, при взаимодействии пользователя с предметом) у конкретного экземпляра класса Item.
-	\item self.it\_status\_cadr
-	\item Описание параметра: параметр - хранит в себе текущий кадр анимации.
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Use\_item}
-def use\_item(self, ability, obj)
-Описание метода: метод отвечающий за изменение полей obj\_hp, obj\_ac, obj\_speed экземпляра класса Object или полей act\_str, act\_agi экземпляра класса Actor на число равное значению поля it.ability экземпляра класса Item.
-\paragraph{Equip\_item}
-def equip\_item(actor, name, inventory)
-Описание метода: метод отвечающий за добавление в список act\_inventory экземпляра класса Actor элемента с названием экземпляра класса Item.
 
