@@ -68,7 +68,7 @@ Python –  высокоуровневый язык программирован
 	t -= 1
 	print('Таймер завершен!')
 	
-	\# Установка времени для таймера (в секундах)
+
 	t = 10
 	countdown(t)
 	
@@ -625,7 +625,7 @@ def \_\_init\_\_(self, master, **kwargs):
 
 '''
 super().\_\_init\_\_(master, **kwargs)
-self.sprites = []  # список спрайтов
+self.sprites = []
 Graphics.canvas = self
 
 def add\_sprite(self, sprite, x, y, z, **kwargs):
@@ -942,9 +942,9 @@ def \_\_init\_\_(self, x, y, z, **params)
 	\item self.on\_click = lambda x : x
 	\item возможно ли кликнуть по объекту
 	\item if self.states is not None:
-	self.set\_state(next(iter(self.states)))  # Установка первого состояния
+	self.set\_state(next(iter(self.states)))
 	\item установка первого состояния если потребуется
-	\item self.rectangle = Rectangle(x, y, 10, 10) # из спрайта
+	\item self.rectangle = Rectangle(x, y, 10, 10)
 	\item прямоугольник объекта
 \end{itemize}
 \subsubsection{Методы}
