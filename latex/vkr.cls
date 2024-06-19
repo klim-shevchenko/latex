@@ -46,6 +46,13 @@
 }
 \newcommand\large{\@setfontsize\large\@xviipt{22}} % большой шрифт
 \newcommand\tiny{\@setfontsize\tiny\@vipt{6pt}} % мелкий шрифт
+\newcommand\small{\@setfontsize\small\@xipt{13.6}}%
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viiipt{9.5}}
+\newcommand\Large{\@setfontsize\Large\@xviipt{22}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xxpt{25}}
+\newcommand\huge{\@setfontsize\huge\@xxvpt{30}}
+\newcommand\Huge{\@setfontsize\Huge\@xxvpt{30}}
+
 
 % Параграфы
 \renewcommand\baselinestretch{\interval} % полуторный интервал
@@ -66,8 +73,8 @@
 \newlength\pheight % высота A4
 \setlength\pagetop{2cm}
 \setlength\pagebottom{2cm}
-\setlength\pageleft{2cm}
-\setlength\pageright{1cm}
+\setlength\pageleft{3cm}
+\setlength\pageright{1.5cm}
 \setlength\pwidth{210mm}
 \setlength\pheight{297mm}
 
@@ -343,7 +350,7 @@
 \renewcommand\thesubsubsection{\thesubsection .\@arabic\c@subsubsection}
 \renewcommand\theparagraph{\thesubsubsection.\@arabic\c@paragraph}
 
-\def\@startsection#1#2#3#4#5#6#7{% 7-й параметр - стиль команды python *
+\def\@startsection#1#2#3#4#5#6#7{% 7-й параметр - стиль команды с *
   \if@noskipsec \leavevmode \fi
   \par
   \@tempskipa #4\relax
@@ -436,7 +443,7 @@
 \renewcommand\p@enumii{\theenumi}
 \renewcommand\p@enumiii{\theenumi(\theenumii)}
 \renewcommand\p@enumiv{\p@enumiii\theenumiii}
-\newcommand\labelitemi{-}
+\newcommand\labelitemi{--}
 \newcommand\labelitemii{\normalfont\bfseries \textendash}
 \newcommand\labelitemiii{\textasteriskcentered}
 \newcommand\labelitemiv{\textperiodcentered}
@@ -638,7 +645,7 @@
 
 \def\добавитьПлакат#1#2{% добавляет в aux команду записи в lop файл
   \immediate\write\@auxout
-      {\string\@writefile{lop}{\печатьПлакат{Лист #1. #2}}}
+      {\string\@writefile{lop}{\печатьПлакат{Лист #1. #2.}}}
 }
 
 \def\добавитьПлакатСодержание#1#2{% добавляет в aux команду записи в lop файл
