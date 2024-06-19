@@ -723,326 +723,164 @@ BaldursGame.timer
 
 root.mainloop()
 
-\subsection{Диаграмма компонентов классов}
-
+\subsection{Архитектура платформы для создания ролевых игр}
+\subsubsection{Диаграмма компонентов классов}
 Диаграмма компонентов описывает особенности физического представления разрабатываемой системы. Она позволяет определить архитектуру системы, установив зависимости между программными компонентами, в роли которых может выступать как исходный, так и исполняемый код. Основными графическими элементами диаграммы компонентов являются компоненты, интерфейсы, а также зависимости между ними. На рисунке \ref{diagram.eps:image} изображена диаграмма компонентов для проектируемой системы. Она включает в себя основной класс платформы игры Game и производные от него классы, класс Object с наследниками и их параметрами (полями и методами).
 \begin{figure}[ht]
 	\center{\includegraphics[width=1\linewidth]{diagram}}
 	\caption{Диаграмма компонентов}
 	\label{diagram:image}
 \end{figure}
-\subsection{Модули и классы}
-\subsection{Game}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self,  canvas, window, **params) 
-\begin{itemize} 
-	\item self.rpg\_dict\_of\_area = {} 
-	\item словарь, хранящий в себе множество экземпляров класса Area, {number - ключ : name Area - значение}
-	\item self.team\_of\_pc = [] 
-	\item список, хранящий в себе имена экземпляров класса Actor с параметром category = "pc"
-	\item self.canvas = canvas 
-	\item графика
-	\item self.root = window 
-	\item окно для графики
-	\item self.current\_area = None 
-	\item параметр хранящий, текущую зону
-	\item self.scripts = {}  
-	\item Словарь для хранения запущенных сценариев
-	\item self.events = {} 
-	\item Словарь для хранения запущенных event`ов сценариев
-	\item self.canvas.bind("<Button-1>", self.mouse\_left\_click)
-	\item обработчик клика
-	\item Game.game = self
-	\item экземпляр игры, для обращения к нему напрямую
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{New\_area}
-def new\_area(self, name, area)
-Описание метода: Добавляет новую зону в список.
-\paragraph{Set\_area}
-def set\_area(self, name)
-Описание метода: Устанавливает текущую зону, загружает графику зоны.
-\paragraph{New\_actor}
-def new\_actor(self, name, **params)
-Описание метода: метод отвечающий за создание класса, потомка от Actor и создание поля из параметров, и установление их в начальные значения.
-\paragraph{Start\_script}
-def start\_script(self, script\_function, script\_name, *args)
-Описание метода: Запускает сценарий в отдельном потоке с возможностью остановки и передачи аргументов.
-\paragraph{Stop\_script}
-def stop\_script(self, script\_name)
-Описание метода: Останавливает сценарий по имени.
-\paragraph{Add\_pc\_to\_team}
-def add\_pc\_to\_team(self, pc)
-Описание метода: метод отвечающий за добавление имени экземпляра класса Actor с параметром category = "pc" в список team\_of\_pc, хранящий имена всех игровых персонажей.
-\paragraph{Remove\_pc\_from\_team}
-def remove\_pc\_from\_team(self, pc)
-Описание метода: метод отвечающий за удаление имени экземпляра класса Actor с параметром category = "pc" в список team\_of\_pc, хранящий имена всех игровых персонажей.
-\paragraph{Set\_team}
-def set\_team(self, x, y, z)
-Описание метода: Устанавливает координаты персонажей команды.
-\paragraph{Update}
-def update(self)
-Описание метода: Вызывается в таймере для обновления всех переменных в текущей зоне.
-\paragraph{Mouse\_left\_click}
-def mouse\_left\_click(self, event)
-Описание метода: обрабатывает клик мыши.
-\paragraph{Timer}
-def timer(self)
-Описание метода: Таймер дожен вызывать метод update постоянно.
+\paragraph{Описание классов}
+\begin{enumerate}
+	\item[Graphics] - класс, управляющий спрайтами. Содержит в себе:
+	\begin{itemize}
+		\item self.sprites - список спрайтов;
+		\item add\_sprite(self, sprite x, y, z, image) - добавляет в список спрайт, сохраняет координаты;
+		\item change\_sprite(self, sprite new\_sprite) - меняет местами спрайты в списке.
+		\item delete\_sprite(self, sprite) - удаляет спрайт из списка.
+		\item clear\_all(self) - очищает список спрайтов.
+		\item update(self) - добавляет все спрайты из списка на форму.
+	\end{itemize}
+	\item[Sprite] - класс, хранящий в себе изображение игровых объектов image.
+	\begin{itemize}
+		\item self.x - координата x.
+		\item self.y - координата y.
+		\item self.z - координата z.
+		\item self.tag - уникальный номер спрайта.
+		\item self.image - изображение.
+		\item set\_tag(self, tag) - устанавливает tag спрайту.
+		\item get\_tag(self) - возвращает tag спрайта.
+		\item set\_z(self, z) - устанавливает z координату.
+		\item set\_coords(self, new\_x, new\_y) - устанавливает новые координаты.
+		\item update(self) - ничего не делает.
+	\end{itemize}
+	\item[Animation] - класс, хранящий в себе список изображений игровых объектов image. Потомок класса Sprite.
+	\begin{itemize}
+		\item self.current\_frame - текущий кадр.
+		\item self.images  - Загрузка всех кадров анимации.
+		\item self.image - Установка начального изображения.
+		\item self.speed - скорость анимации.
+		\item self.counter - счётчик кадров.
+		\item self.cycle - проверка на то что должна ли быть анимация циклично или нет.
+		\item self.running - проверка проигрывается ли сейчас анимация.
+		\item update(self) - обновляет кадр в анимации.
+	\end{itemize}
+	\item[Rectangle] - абстрактный класс прямоугольника.
+	\begin{itemize}
+		\item self.pos\_x - координата x.
+		\item self.pos\_y - координата y.
+		\item self.width - ширина.
+		\item self.height - высота.
+		\item is\_in(self, rect) - функция проверки нахождения одного прямоугольника в другом.
+		\item is\_point\_inside(self, target\_x, target\_y) - функция проверки точки в пределах прямоугольника.
+	\end{itemize}
+	\item[Object] - класс, от которого наследуются классы Adnd\_Actor, Actor, Portal.
+	\begin{itemize}
+		\item self.pos\_x - координата x.
+		\item self.pos\_y - координата y.
+		\item self.pos\_z - координата z.
+		\item self.current\_state - текущее состояние.
+		\item self.visible - видимость портала.
+		\item self.on\_click - функция клика по объекту.
+		\item self.rectangle - прямоугольник объекта.
+		\item set\_state(self, state\_name) -устанавливает состояние.
+		\item actor\_in(self, actor) - ничего не делает.
+		\item update(self) - ничего не делает.
+	\end{itemize}
+	\item[Portal] - класс объекта для перехода между зонами. Потомок класса Object.
+	\begin{itemize}
+		\item self.states - состояние портала.
+		\item self.sprite - спрайт портала.
+		\item self.category - категория.
+		\item self.rectangle = - прямоугольник портала.
+		\item self.area - зона в которую ведёт портал.
+		\item self.team\_x - координата x в  которую нужно разместить команду.
+		\item self.team\_y - координата y в  которую нужно разместить команду.
+		\item self.visible - видимость портала.
+		\item actor\_in(actor) - события, которые произойдут, когда персонаж окажется внутри прямоугольника портала.
+	\end{itemize}
+	\item[Actor] - класс персонажа, содержащий внутри себя основные поля и методы для перемещения по рабочему окну.
+	\begin{itemize}
+		\item self.sprite - спрайт персонажа.
+		\item self.speed\_x - значение скорости x.
+		\item self.speed\_y - значение скорости y.
+		\item self.target\_x - координата x в которую должен прийти персонаж.
+		\item self.target\_y - координата y в которую должен прийти персонаж.
+		\item self.rectangle - прямоугольник персонажа.
+		\item self.is\_attack - атакует ли сейчас персонаж.
+		\item update(self) - функция обновления координат и состояния персонажа.
+		\item search\_position(self, new\_x, new\_y) - поиск координат в которые нужно двигаться персонажу.
+		\item stop\_move(self) - остановка движения персонажа.
+	\end{itemize}
+	\item[Adnd\_Actor] - класс персонажа, содержащий методы связанные с взаимодействием с другими персонажами. Является наследником Actor.
+	\begin{itemize}
+		\item self.on\_click событие при клике на персонажа
+		\item update(self) - функция обновления координат и состояния персонажа.
+		\item click(self) - функция вызывается при клике по персонажу.
+		\item attack(self, actor) -  функция атаки персонажа по другому персонажу.
+	\end{itemize}
+	\item[Area] - зона, в которой находятся персонажи и объекты. Содержит следующие поля и методы:
+	\begin{itemize}
+		\item self.area\_zone - параметр определяющий особенности конкретной зоны.
+		\item self.objects - список, хранящий в себе множество объектов.
+		\item self.sprites - список фоновых спрайтов.
+		\item self.rectangles - прямоугольник зоны.
+		\item add\_sprite(self, sprite, x, y, z) - функция добавляет спрайт в зону.
+		\item add\_object(self, obj, x, y, z) - функция добавляет объект в зону.
+		\item remove\_object(self, obj) - функция удаляет объект из зоны.
+		\item load\_sprites(self) - функция загружает все спрайты зоны.
+		\item add\_rect(self, rec) - функция добавляет прямоугольник в зону.
+		\item entry\_script(self) - функция запускается, когда команда входит в зону.
+		\item exit\_script(self) - функция запускается, когда команда выходит из зоны.
+		\item update(self) - функция изменяет и проверяет изменение всех объектов в зоне.
+	\end{itemize}
+	\item[Game] - абстрактный класс, управляющий игрой. Имеет следующие поля и методы:
+	\begin{itemize}
+		\item self.rpg\_dict\_of\_area - словарь, хранящий в себе множество экземпляров класса Area.
+		\item self.team\_of\_pc - список, хранящий в себе имена экземпляров класса Actor с параметром category = "pc".
+		\item self.canvas - графика.
+		\item self.root - окно для графики.
+		\item self.current\_area - параметр хранящий, текущую зону.
+		\item self.scripts - словарь для хранения запущенных сценариев.
+		\item self.events - словарь для хранения запущенных event`ов сценариев.
+		\item self.canvas.bind("<Button-1>", self.mouse\_left.\_click) - обработка клика мыши по рабочему окну.
+		\item new\_area(self, name, area) - функция добавляет новую зону в список.
+		\item set\_area(self, name) - функция устанавливает текущую зону, загружает графику зоны.
+		\item new\_actor(self, name, **params) - функция создаёт класс, потомок от Actor и создаёт поле из параметров, и установление их в начальные значения.
+		\item add\_pc\_to\_team(self, pc) - функция добавляет персонажа в команду.
+		\item remove\_pc\_from\_team(self, pc) - функция удаляет персонажа из команды.
+		\item start\_script(self, script\_function, script\_name, *args) - функция запускает сценарий в отдельном потоке с возможностью остановки и передачи аргументов.
+		\item stop\_script(self, script\_name) - функция останавливает сценарий по имени.
+		\item set\_team(self, x, y, z) - функция устанавливает координаты персонажей команды.
+		\item update(self) - функция вызывается в таймере для обновления всех переменных в текущей зоне.
+		\item mouse\_left\_click(self, event) - функция обрабатывает клик мыши.
+		\item timer(self) - функция должна вызывать метод update постоянно.
+	\end{itemize}
+\end{enumerate}
 
+\subsubsection{Реализация графической подсистемы}
+Графическая подсистема основана на библиотеке tkinter, которая используется для создания графического интерфейса пользователя. В контексте платформы, tkinter используется для отображения и управления спрайтами — графическими объектами, которые представляют персонажей, предметы и другие элементы игры.
+\paragraph{Система спрайтов}
+Она реализована через класс Graphics, который расширяет tk.Canvas. Этот класс управляет отображением спрайтов на холсте, их сортировкой по z-координате (что позволяет создать эффект глубины), а также обновлением их позиций. Спрайты могут быть добавлены, перемещены и удалены с холста. Вот пример метода, который добавляет спрайт на холст:
 
-\subsection{Area}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, **params)
-\begin{itemize}
-	\item self.area\_zone = params 
-	\item параметр определяющий особенности конкретной зоны
-	\item self.objects = [] 
-	\item список, хранящий в себе множество экземпляров классов Item
-	\item self.sprites = [] 
-	\item список фоновых спрайтов
-	\item self.rectangles = None 
-	\item список, хранящий в себе множетво прямоугольников
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Add\_sprite}
-def add\_sprite(self, sprite, x, y, z)
-Описание метода: Добавляет спрайт в зону.
-\paragraph{Add\_object}
-def add\_object(self, obj, x, y, z)
-Описание метода: Добавляет объект в зону.
-\paragraph{Remove\_object}
-def remove\_object(self, obj)
-Описание метода: Удаляет объект из зоны.
-\paragraph{Load\_sprites}
-def load\_sprites(self)
-Описание метода: Загружает все спрайты зоны.
-\paragraph{Add\_rect}
-def add\_rect(self, rec)
-Описание метода: Добавляет прямоугольник в зону.
-\paragraph{Entry\_script}
-def entry\_script(self))
-Описание метода: Запускается, когда команда входит в зону.
-\paragraph{Exit\_script}
-def exit\_script(self)
-Описание метода: Запускается, когда команда выходит из зоны.
-\paragraph{Update}
-def update(self)
-Описание метода: Изменяет и проверяет изменение всех персонажей в зоне.
+def add\_sprite(self, sprite, x, y, z, **kwargs):
+tag = self.create\_image(x, y, image=sprite.image, anchor='center', **kwargs)
+sprite.set\_tag(tag)
+sprite.set\_z(z)
+self.sprites.append(sprite)
+self.sprites.sort(key=lambda sprite: sprite.z)
+\subsubsection{Реализация зон}
+Зоны в программе представляют собой различные игровые области или уровни. Каждая зона реализована через класс Area, который содержит спрайты и объекты, принадлежащие этой зоне. Зоны могут содержать свои собственные скрипты для входа и выхода из зоны (entry\_script и exit\_script), а также метод update, который обновляет состояние всех объектов в зоне.
+\subsubsection{Реализация объектов и персонажей}
+Объекты и персонажи являются ключевыми элементами игрового мира. Они реализованы через классы Object и Adnd\_Actor соответственно. Object может представлять любой игровой объект, который может взаимодействовать с игроком или окружением. Adnd\_Actor расширяет Object и добавляет дополнительные свойства и методы, специфичные для персонажей, такие как движение, атака и взаимодействие с другими персонажами.
+\subsubsection{Реализация сценариев}
+Сценарии в игре используются для создания интерактивных и динамических событий. Они могут быть реализованы как функции, которые запускаются в отдельных потоках, позволяя игре продолжать обрабатывать другие задачи в фоновом режиме. Класс Game содержит методы start\_script и stop\_script для управления этими сценариями.
+\subsubsection{Вычисление пересечения прямоугольников}
+Для определения столкновений и взаимодействий между объектами используется класс Rectangle. Он содержит методы, такие как is\_in, который проверяет, находится ли один прямоугольник внутри другого, и is\_point\_inside, который проверяет, находится ли точка внутри прямоугольника. Вот пример метода is\_point\_inside:
 
-\subsection{Sprite}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, image)
-\begin{itemize}
-	\item self.spr\_image = image
-	\item Описание параметра: параметр хранит изображение конкретного экземпляра класса Sprite.
-	\item self.tag = None
-	\item self.spr\_x = x
-	\item Описание параметра: параметр хранит числовое значение обозначающее расположение конкретного экземпляра класса Sprite.
-	\item self.spr\_y = y
-	\item Описание параметра: параметр хранит числовое значение обозначающее расположение конкретного экземпляра класса Sprite.
-	\item self.spr\_z = z
-	\item Описание параметра: параметр хранит числовое значение обозначающее расположение конкретного экземпляра класса Sprite.
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Set\_tag}
-def set\_tag(self, tag)
-\paragraph{Set\_z}
-def set\_z(self, z)
-\paragraph{Get\_tag}
-def get\_tag(self)
-\paragraph{Set\_coords}
-def set\_coords(self, new\_x, new\_y)
-\paragraph{Update}
-def update(self)
-\subsection{Graphics}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, master, **kwargs)
-\begin{itemize}
-	\item super().\_\_init\_\_(master, **kwargs)
-	\item self.sprites = [] 
-	\item список спрайтов
-	\item Graphics.canvas = self
-	\item параметр для работы с графикой, где к ней нужно обращаться напрямую
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Add\_sprite}
-def add\_sprite(self, sprite, x, y, z, **kwargs)
-Описание метода: Добавляет спрайт на Canvas
-\paragraph{Update}
-def update(self)
-Описание метода: Перерисовывает все спрайты
-\paragraph{Change\_sprite}
-def change\_sprite(self, sprite, new\_sprite)
-Описание метода: Меняет  спрайт на новый
-\paragraph{Delete\_sprite}
-def delete\_sprite(self, sprite)
-Описание метода: Удаляет спрайт с Canvas
-\paragraph{Clear\_all}
-def clear\_all(self)
-Описание метода: Удаляет все спрайты с Canvas
-
-\subsection{Animation(Sprite)}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, frames, cycle=True)
-\begin{itemize}
-	\item super().\_\_init\_\_(frames[0])
-	\item self.images = frames
-	\item Описание параметра: """список кадров"""
-	\item self.current\_frame = 0
-	\item self.images = [tk.PhotoImage(file=frame) for frame in frames]   
-	\item Загрузка всех кадров анимации
-	\item self.image = self.images[0]
-	\item Установка начального изображения
-	\item self.speed = 3
-	\item Описание параметра: """скорость анимации"""
-	\item self.counter = self.speed
-	\item self.cycle = cycle
-	\item self.running = True
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Update:}
-def update(self):
-Меняет текущее изображение в списке изображений.
-
-\subsection{Object}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, x, y, z, **params)
-\begin{itemize}
-	\item self.pos\_x = x
-	\item координата x
-	\item self.pos\_y = y
-	\item координата y
-	\item self.pos\_z = z
-	\item координата z
-	\item self.current\_state = None
-	\item текущее состояние
-	\item self.visible = True
-	\item видим ли объект
-	\item self.on\_click = lambda x : x
-	\item возможно ли кликнуть по объекту
-	\item if self.states is not None:
-	self.set\_state(next(iter(self.states)))
-	\item установка первого состояния если потребуется
-	\item self.rectangle = Rectangle(x, y, 10, 10)
-	\item прямоугольник объекта
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Set\_state}
-def set\_state(self, state\_name):
-Описание метода: меняет текущее состояние объекта
-\paragraph{Actor\_in}
- def actor\_in(self, actor):
-Описание метода:Вызывается когда actor входит внутрь объекта
-\paragraph{Update}
-def update(self)
-Описание метода: ничего не делает
-
-\subsection{Actor(Object)}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, x, y, z, **params)
-\begin{itemize}
-	\item self.sprite = self.states[next(iter(self.states))]
-	\item параметр хранящий спрайт
-	\item super().\_\_init\_\_(x, y, z, **params)
-	\item self.speed\_x = 0 
-	\item значение скорости x
-	\item self.speed\_y = 0  
-	\item значение скорости y
-	\item self.target\_x = 0
-	\item координата x в которую будет двигаться персонаж
-	\item self.target\_y = 0
-	\item координата y в которую будет двигаться персонаж
-	\item self.rectangle = Rectangle(self.pos\_x, self.pos\_y, self.sprite.image.width(), self.sprite.image.height())
-	\item прямоугольник персонажа
-	\item self.is\_attack = False
-	\item состояние - атакует ли персонаж сейчас
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{update}
-def update(self)
-Описание метода: изменяет координаты и состояние персонажа.
-\paragraph{Search\_position}
-def search\_position(self, new\_x, new\_y)
-Описание метода:  Изменяет направление движения у персонажа.
-\paragraph{Stop\_move}
-def stop\_move(self):
-Описание метода: Останавливает движение персонажа.
-
-\subsection{Adnd\_actor(Actor)}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, x, y, z, **params)
-\begin{itemize}
-	\item super().\_\_init\_\_(x, y, z, **params)
-	\item self.on\_click = self.click
-	\item событие по клику на персонажа
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Click}
-def click(self)
-Описание метода: вызывается при клике на персонажа.
-\paragraph{Attack}
-def attack(self, actor)
-Описание метода: совершает атаку по actor.
-\paragraph{Update}
-def update(self)
-Описание метода: обновляет состояние персонажа.
-
-\subsection{Rectangle}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, x, y, width, height)
-\begin{itemize}
-	\item self.x = x
-	\item координата x прямоугольника
-	\item self.y = y
-	\item координата y прямоугольника
-	\item self.width = width
-	\item ширина прямоугольника
-	\item self.height = height
-	\item высота прямоугольника
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Is\_in}
-def is\_in(self, rect)
-Описание метода: Проверяет, входит ли прямоугольник self в прямоугольник rect
-\paragraph{Is\_point\_inside}
-def is\_point\_inside(self, target\_x, target\_y)
-Описание метода: Проверяет, входит ли точка (x, y) в данный прямоугольник
-
-\subsection{Portal(Object)}
-\subsubsection{Описание модуля}
-\paragraph{Конструктор и поля модуля}
-def \_\_init\_\_(self, x, y, width, height, area, team\_x, team\_y)
-\begin{itemize}
-	\item self.states = None
-	\item состояние портала
-	\item self.sprite = None
-	\item спрайт портала
-	\item self.category = 'portal'
-	\item категория портала
-	\item super().\_\_init\_\_(x, y, 0)
-	\item self.rectangle = Rectangle(x, y, width, height)
-	\item прямоугольник портала
-	\item self.area = area
-	\item текущая зона
-	\item self.team\_x = team\_x
-	\item координата x в новой зоне в которую установят команду
-	\item self.team\_y = team\_y
-	\item координата y в новой зоне в которую установят команду
-	\item self.visible = False
-	\item видимость портала
-\end{itemize}
-\subsubsection{Методы}
-\paragraph{Actor\_in}
-def actor\_in(self, actor)
-Описание метода: Проверяет находится ли персонаж внутри портала
+def is\_point\_inside(self, target\_x, target\_y):
+return (self.x <= target\_x <= self.x + self.width) and \
+(self.y <= target\_y <= self.y + self.height)
+Этот метод использует логические операторы для проверки, находится ли точка (target\_x, target\_y) в пределах прямоугольника, определенного координатами (x, y) и размерами (width, height).
 
