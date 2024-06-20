@@ -1,7 +1,7 @@
 \section{Техническое задание}
 \subsection{Основание для разработки}
 
-Основанием для разработки является задание на выпускную квалификационную работу бакалавра <\Тема , \ТемаВтораяСтрока>.
+Основанием для разработки является задание на выпускную квалификационную работу бакалавра <\Тема \ТемаВтораяСтрока>.
 
 \subsection{Цель и назначение разработки}
 
@@ -70,10 +70,6 @@ Area.set\_enter\_script(script)
 		
 		class Ruins(Area):
 			def \_\_init\_\_(self):
-				'''
-				Класс игровой зоны Ruins
-			
-				'''
 				super().\_\_init\_\_()
 				self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
 				self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
@@ -87,15 +83,7 @@ Area.set\_enter\_script(script)
 				self.add\_object(p, p.pos\_x, p.pos\_y, 100)
 				Game.game.start\_script(self.ai, "ai", self.grunt)
 				Game.game.start\_script(self.walk\_two, "footman", 50, 50)
-		
-		
 			def walk(self, step\_x, step\_y, actor):
-				'''
-				Сценарий для движения бугая
-		
-				:param step\_x: шаг движения x
-				:param step\_y: шаг движения y
-				'''
 				if actor.hp <= 0:\\
 					Game.game.stop\_script("grunt")
 					new\_x = 200
@@ -118,7 +106,13 @@ Area.set\_enter\_script(script)
 				actor.search\_position(new\_x, new\_y)
 		
 				time.sleep(2)
-		
+\end{lstlisting}  
+\caption{пример Ruins}
+\label{ruins2:image}
+\end{figure}
+продолжение на рисунке \ref{ruins2:image}:
+\begin{figure}[H]
+	\begin{lstlisting}[language=Python]		
 		модуль bggame:
 		from ruins import *
 		import time
@@ -194,21 +188,10 @@ Area.set\_enter\_script(script)
 			ATTACK\_RANGE = 50
 		
 			def \_\_init\_\_(self, x, y, z, **params):
-				'''
-				Класс Adnd\_actor содержащий основные механики взаимодействия с другими персонажами
-		
-				:param x: координата x
-				:param y: координата y
-				:param z: координата z
-				'''
 				super().\_\_init\_\_(x, y, z, **params)
 				self.on\_click = self.click
 			
 			def click(self):
-				'''
-				вызывается при клике на персонажа
-		
-				'''
 				pc = rpg.game.Game.game.team\_of\_pc[0]
 				if pc == self:
 					return
@@ -223,17 +206,8 @@ Area.set\_enter\_script(script)
 					pc.is\_attack = False
 		
 			def attack(self, actor):
-				'''
-				совершает атаку по actor
-		
-				:param actor: персонаж, которого атакуют
-				'''
 				actor.hp -= self.damage
 			def update(self):
-				'''
-				обновляет состояние персонажа
-		
-				'''
 				super().update()
 				if self.hp <= 0:
 					self.stop\_move()
@@ -248,21 +222,11 @@ Area.set\_enter\_script(script)
 Пример представлен на рисунке \ref{area:image}:
 \begin{figure}[H]
 	\begin{lstlisting}[language=Python]
-		import random
-		from math import sqrt
-		import time
-		from rpg.area import *
-		from rpg.sprite import *
-		from rpg.rectangle import *
 		from rpg.game import Game
 		from rpg.portal import Portal
 		
 		class Ruins(Area):
 			def \_\_init\_\_(self):
-				'''
-				Класс игровой зоны Ruins
-		
-				'''
 				super().\_\_init\_\_()
 				self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
 				self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(),\\ height=Sprite('images/fon3.png').image.height()))
@@ -275,16 +239,8 @@ Area.set\_enter\_script(script)
 				p = Portal(400, 400, 200, 200, 'Village', 480, 100)
 				self.add\_object(p, p.pos\_x, p.pos\_y, 100)
 				Game.game.start\_script(self.ai, "ai", self.grunt)
-				Game.game.start\_script(self.walk\_two, "footman", 50, 50)
-		
-		
+				Game.game.start\_script(self.walk\_two, "footman", 50, 50)		
 			def walk(self, step\_x, step\_y, actor):
-				'''
-				Сценарий для движения бугая
-		
-				:param step\_x: шаг движения x
-				:param step\_y: шаг движения y
-				'''
 				if actor.hp <= 0:
 					Game.game.stop\_script("grunt")
 				new\_x = 200
@@ -302,10 +258,8 @@ Area.set\_enter\_script(script)
 					new\_x -= step\_x
 				elif direction == "right":
 					new\_y = step\_y
-					new\_x += step\_x
-		
+					new\_x += step\_x		
 				actor.search\_position(new\_x, new\_y)
-		
 				time.sleep(2)
 	\end{lstlisting}  
 \caption{зона}
@@ -322,21 +276,9 @@ Area.set\_enter\_script(script)\\
 	\begin{lstlisting}[language=Python]
 		from rpg.object import Object
 		from rpg.game import Game
-		from rpg.rectangle import Rectangle
-		
+		from rpg.rectangle import Rectangle	
 		class Portal(Object):
 			def \_\_init\_\_(self, x, y, width, height, area, team\_x, team\_y):
-				''' 
-				Создает портал в новую зону
-		
-				:param x: координата x портала
-				:param y: координата y портала
-				:param width: ширина портала
-				:param height: высота портала
-				:param area: имя зоны куда будет переход
-				:param team\_x: местоположение команды в новой зоне
-				:param team\_y: местоположение команды в новой зоне
-				'''
 				self.states = None
 				self.sprite = None
 				self.category = 'portal'
@@ -348,16 +290,10 @@ Area.set\_enter\_script(script)\\
 				self.visible = False
 			
 			def actor\_in(self, actor):
-				'''
-				Проверяет находится ли персонаж внутри портала
-		
-				:param actor: проверяемый персонаж
-				'''
 				if actor.category == "pc":
 					Game.game.set\_area(self.area)
 					Game.game.set\_team(self.team\_x, self.team\_y, 100)
-				actor.stop\_move()
-		
+				actor.stop\_move()		
 		модуль ruins
 		import random
 		from math import sqrt
@@ -367,13 +303,8 @@ Area.set\_enter\_script(script)\\
 		from rpg.rectangle import *
 		from rpg.game import Game
 		from rpg.portal import Portal
-		
 		class Ruins(Area):
 			def \_\_init\_\_(self):
-				'''
-				Класс игровой зоны Ruins
-		
-				'''
 				super().\_\_init\_\_()
 				self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
 				self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
@@ -400,27 +331,12 @@ Area.set\_enter\_script(script)\\
 		from rpg.animation import Animation
 		import rpg.game
 		import time
-		
-		class Adnd\_actor(Actor):
-		
+		class Adnd\_actor(Actor):	
 			ATTACK\_RANGE = 50
-		
 			def \_\_init\_\_(self, x, y, z, **params):
-				'''
-				Класс Adnd\_actor содержащий основные механики взаимодействия с другими персонажами
-		
-				:param x: координата x
-				:param y: координата y
-				:param z: координата z
-				'''
 				super().\_\_init\_\_(x, y, z, **params)
 				self.on\_click = self.click
-		
 			def click(self):
-				'''
-				вызывается при клике на персонажа
-		
-				'''
 				pc = rpg.game.Game.game.team\_of\_pc[0]
 				if pc == self:
 					return
@@ -433,19 +349,9 @@ Area.set\_enter\_script(script)\\
 						time.sleep(0.125)
 				if self.hp <=0:
 					pc.is\_attack = False
-		
 			def attack(self, actor):
-				'''
-				совершает атаку по actor
-		
-				:param actor: персонаж, которого атакуют
-				'''
 				actor.hp -= self.damage
 			def update(self):
-				'''
-				обновляет состояние персонажа
-		
-				'''
 				super().update()
 				if self.hp <= 0:
 					self.stop\_move()
@@ -466,13 +372,8 @@ Area.set\_enter\_script(script)\\
 		from rpg.rectangle import *
 		from rpg.game import Game
 		from rpg.portal import Portal
-		
 		class Ruins(Area):
 			def \_\_init\_\_(self):
-				'''
-				Класс игровой зоны Ruins
-		
-				'''
 				super().\_\_init\_\_()
 				self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
 				self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
@@ -485,16 +386,8 @@ Area.set\_enter\_script(script)\\
 				p = Portal(400, 400, 200, 200, 'Village', 480, 100)
 				self.add\_object(p, p.pos\_x, p.pos\_y, 100)
 				Game.game.start\_script(self.ai, "ai", self.grunt)
-				Game.game.start\_script(self.walk\_two, "footman", 50, 50)
-				
+				Game.game.start\_script(self.walk\_two, "footman", 50, 50)	
 			def ai(self, actor):
-				'''
-				скрипт противников
-				
-				:param step\_x: размер шага x до персонажа игрока
-				:param step\_y: размер шага x до персонажа игрока
-				:param actor: персонаж противник
-				'''
 				if actor.hp <= 0:
 					Game.game.stop\_script("ai")
 				import rpg.game
@@ -513,9 +406,8 @@ Area.set\_enter\_script(script)\\
 					if pc.hp <=0:
 						actor.update()
 						Game.game.stop\_script("ai")
-			
 				else:
-				actor.is\_attack = False
+					actor.is\_attack = False
 				time.sleep(2)
 \end{lstlisting}  
 \caption{бой}
@@ -530,57 +422,25 @@ Area.set\_enter\_script(script)\\
 		
 		import tkinter as tk
 		class Sprite:
-	
 			def \_\_init\_\_(self, image):
-				'''
-				Класс спрайта для работы с изображениями на Canvas
-				
-				:param image: адресс изображения который
-				'''
 				self.image = tk.PhotoImage(file=image)
 				self.tag = None
 				self.x = 0
 				self.y = 0
-				self.z = 0
-				
+				self.z = 0		
 			def set\_tag(self, tag):
-				'''
-				Устанавливает тег спрайта
-				
-				:param tag: тег спрайта
-				'''
 				self.tag = tag
 				
 			def set\_z(self, z):
-				'''
-				Устанавливает z-координату спрайта
-				
-				:param z: координата z
-				'''
 				self.z = z
 				
 			def get\_tag(self):
-				'''
-				Возвращает тег спрайта
-				
-				'''
-				return self.tag
-				
+				return self.tag	
 			def set\_coords(self, new\_x, new\_y):
-				'''
-				Обновляет координаты спрайта
-				
-				:param new\_x: координата x
-				:param new\_y: координата y
-				'''
 				if self.tag:
 					self.x = new\_x
 					self.y = new\_y
 			def update(self):
-				'''
-				Обновляет анимацию спрайта
-				
-				'''
 				pass
 	\end{lstlisting}  
 \caption{tkinter}
@@ -589,31 +449,14 @@ Area.set\_enter\_script(script)\\
 Продолжение на рисунке \ref{tkinter2:image}:
 \begin{figure}[H]
 	\begin{lstlisting}[language=Python]
-		модуль graphics
-		
 		import tkinter as tk
-		
 		class Graphics(tk.Canvas):
 			canvas = None
 			def \_\_init\_\_(self, master, **kwargs):
-				'''
-				Класс с методами для работы со спрайтами
-				
-				'''
 				super().\_\_init\_\_(master, **kwargs)
 				self.sprites = []
-				Graphics.canvas = self
-			
+				Graphics.canvas = self			
 			def add\_sprite(self, sprite, x, y, z, **kwargs):
-				'''
-				Добавляет спрайт на Canvas
-				
-				:param sprite: спрайт
-				:param x: координата x
-				:param y: координата y
-				:param z: координата z
-				:param kwargs: параметры относящиеся к конкретному изображению в tkinter
-				'''
 				tag = self.create\_image(x, y, image=sprite.image, anchor='center', **kwargs)
 				sprite.set\_tag(tag)
 				sprite.set\_z(z)
@@ -621,32 +464,18 @@ Area.set\_enter\_script(script)\\
 				sprite.y = y
 				self.sprites.append(sprite)
 				self.sprites.sort(key=lambda sprite: sprite.z)
-			
 			def update(self):
-				'''
-				Перерисовывает все спрайты
-				
-				'''
 				for sprite in self.sprites:
 				sprite.update()
 				self.tag\_raise(sprite.get\_tag())
 				self.coords(sprite.get\_tag(), sprite.x, sprite.y)
 				self.itemconfig(sprite.get\_tag(), image=sprite.image)
-				
-			
 			def change\_sprite(self, sprite, new\_sprite):
-				'''
-				Меняет  спрайт на новый.
-				
-				:param sprite: экземпляр спрайта
-				:param new\_sprite: новый спрайт
-				'''
 				old\_sprite\_pos = None
 				for i, s in enumerate(self.sprites):
 				if s.get\_tag() == sprite.get\_tag():
 					old\_sprite\_pos = i
 					break
-				
 				if old\_sprite\_pos is not None:
 					old\_tag = sprite.get\_tag()
 					
@@ -654,26 +483,14 @@ Area.set\_enter\_script(script)\\
 				new\_sprite.set\_tag(old\_tag)\
 				new\_sprite.set\_tag(old\_tag)
 				new\_sprite.set\_z(sprite.z)
-				
 				self.tag\_raise(old\_tag)
 				self.coords(old\_tag, sprite.x, sprite.y)
 				self.itemconfig(old\_tag, image=new\_sprite.image)
 			
 			def delete\_sprite(self, sprite):
-				'''
-				Удаляет спрайт с Canvas.
-				
-				:param sprite: экземпляр спрайта
-				:return:
-				'''
 				self.delete(sprite.get\_tag()
 				self.sprites.remove(sprite)
-			
-			def clear\_all(self):
-				'''
-				Удаляет все спрайты с Canvas
-				
-				'''
+			def clear\_all(self):	
 				for sprite in self.sprites:
 				self.delete(sprite.get\_tag())
 				self.sprites.clear()
@@ -687,20 +504,12 @@ Area.set\_enter\_script(script)\\
 \begin{figure}[H]
 	\begin{lstlisting}[language=Python]
 		модуль baldursgame '''пользовательский модуль'''
-		
 		from ruins import *
 		from village import *
 		import time
 		import random
-		
 		class BaldursGame(Game):
 			def \_\_init\_\_(self, canvas, window, **params):
-				'''
-				Класс конкретной игры для демонстрации
-				
-				:param canvas: класс графической системы
-				:param window: окно на которое будет выводится игра
-				'''
 				super().\_\_init\_\_(canvas, window, **params)
 				from mage import Mage
 				self.add\_pc\_to\_team(Mage(0, 0, 0))
@@ -709,22 +518,16 @@ Area.set\_enter\_script(script)\\
 				self.set\_area('Ruins')
 				self.set\_team(500, 300, 100)
 				self.timer()
-		
 		модуль main
 		from bggame import *
-		
 		root = tk.Tk()
 		root.geometry('1500x1500')
-		
 		exit\_button = tk.Button(root, text="Exit", fg="red", command=root.destroy)
 		canvas = Graphics(root, width=1500, height=1500)
 		Graphics.canvas = canvas
-		
 		BaldursGame(canvas, root)
-		
 		canvas.place(height = 1500, width =1500)
 		BaldursGame.timer
-		
 		root.mainloop()
 	\end{lstlisting}  
 	\caption{tkinter}
