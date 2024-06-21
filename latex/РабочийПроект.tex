@@ -1,209 +1,423 @@
 \section{Рабочий проект}
 \subsection{Классы, используемые при разработке приложения}
 
-Можно выделить следующий список классов и их методов, использованных при разработке приложения (таблица \ref{class:table}). Пример таблицы с уменьшенным межстрочным интервалом.
-
-\renewcommand{\arraystretch}{0.8} % уменьшение расстояний до сетки таблицы
-\begin{xltabular}{\textwidth}{|X|p{2.5cm}|>{\setlength{\baselineskip}{0.7\baselineskip}}p{4.85cm}|>{\setlength{\baselineskip}{0.7\baselineskip}}p{4.85cm}|}
-\caption{Описание классов платформы, используемых в приложении\label{class:table}}\\
-\hline \centrow \setlength{\baselineskip}{0.7\baselineskip} Название класса & \centrow \setlength{\baselineskip}{0.7\baselineskip} Модуль, к которому относится класс & \centrow Описание класса & \centrow Методы \\
-\hline \centrow 1 & \centrow 2 & \centrow 3 & \centrow 4\\ \hline
-\endfirsthead
-\caption*{Продолжение таблицы \ref{class:table}}\\
-\hline \centrow 1 & \centrow 2 & \centrow 3 & \centrow 4\\ \hline
-\finishhead
-sprite & rpg & Sprite – Инициализация класса Sprite для работы с изображениями на холсте Canvas. & set\_tag(self, tag)
-
-Устанавливает тег для спрайта.
-
-set\_z(self, z)
-
-Устанавливает z-координату спрайта.
-
-get\_tag(self)
-
-Возвращает тег спрайта.
-
-set\_coords(self, new\_x, new\_y)
-
-Обновляет координаты спрайта.
-
-update(self)
-Обновляет анимацию спрайта, если она у него есть.\\
-\hline animation & rpg & Animation – Класс анимации спрайта & update(self)
-
-Меняет текущее изображение в списке изображений.\\
-\hline graphics & rpg & Graphics – Класс с методами для работы со спрайтами & add\_sprite(self, sprite, x, y, z, **kwargs)
-
-Добавляет спрайт на Canvas.
-
-update(self)
-
-Перерисовывает все спрайты.
-
-change\_sprite(self, sprite, new\_sprite)
-
-Меняет спрайт на новый в Canvas.
-
-delete\_sprite(self, sprite)
-
-Удаляет спрайт с Canvas.
-
-clear\_all(self)
-
-Удаляет все спрайты с Canvas.\\
-\hline rectangle & rpg & Rectangle – Класс прямоугольника, используемый для перемещения & is\_in(self, rect)
-
-Проверяет, входит ли прямоугольник self в прямоугольник rect.
-
-is\_point\_inside(self, target\_x, target\_y)
-
-Проверяет, входит ли точка (x, y) в данный прямоугольник.\\
-\hline object & rpg & Object – Класс объекта, который будет изменяться методами игровой системы и методами графической системы & set\_state(self, state\_name)
-
-Меняет текущее состояние объекта.
-
-actor\_in(self, actor)
-
-Вызывается когда actor входит внутрь объекта.
-
-update(self)
-
-Этот метод будет изменён в классах наследниках от object.\\
-\hline portal & rpg & Portal – Класс портала, используемый для перемещения команды персонажей в новую зону & actor\_in(self, actor)
-
-Проверяет находится ли персонаж внутри портала.\\
-\hline actor & rpg & Actor – Класс Actor для работы с персонажем & update(self)
-
-Изменяет координаты и состояние персонажа.
-
-search\_position(self, new\_x, new\_y)
-
-Изменяет направление движения у персонажа.
-
-stop\_move(self)
-
-Останавливает движение персонажа.\\
-\hline adnd\_actor & rpg & Adnd\_actor – Класс Adnd\_actor содержащий основные механики взаимодействия с другими персонажами & click(self)
-
-Вызывается при клике на персонажа.
-
-attack(self, actor)
-
-Совершает атаку по actor.
-
-update(self)
-
-Обновляет состояние персонажа.\\
-\hline area & rpg & Area – Класс Area, содержащий все поля и методы используемые в каждой зоне & add\_sprite(self, sprite, x, y, z)
-
-Добавляет спрайт в зону.
-
-add\_object(self, obj, x, y, z)
-
-Добавляет объект в зону.
-
-remove\_object(self, obj)
-
-Удаляет объект из зоны.
-
-load\_sprites(self)
-
-Загружает все спрайты зоны.
-
-add\_rect(self, rec)
-
-Добавляет прямоугольник в зону.
-
-entry\_script(self)
-
-Запускается, когда команда входит в зону
-
-exit\_script(self)
-
-Запускается, когда команда выходит из зоны
-
-update(self)
-
-Изменяет и проверяет изменение всех объектов в зоне.\\
-\hline game & rpg & Game – Класс системы управления игрой & new\_area(self, name, area)
-
-Добавляет новую зону в список.
-
-set\_area(self, name)
-
-Устанавливает текущую зону, загружает графику зоны.
-
-new\_actor(self, name, **params)
-
-Создаёт класс, потомок от Actor и создаёт поле из параметров, и установление их в начальные значения.
-
-add\_pc\_to\_team(self, pc)
-
-Добавляет персонажа в команду.
-
-remove\_pc\_from\_team(self, pc)
-
-Удаляет персонажа из команды.
-
-start\_script(self, script\_function, script\_name, *args)
-
-Запускает сценарий в отдельном потоке с возможностью остановки и передачи аргументов.
-
-stop\_script(self, script\_name)
-
-Останавливает сценарий по имени.
-
-set\_team(self, x, y, z)
-
-Устанавливает координаты персонажей команды.
-
-update(self)
-
-Вызывается в таймере для обновления всех переменных в текущей зоне.\\
-
-
-\hline & & & mouse\_left\_click(self, event)
-
-Обрабатывает клик мыши.
-
-timer(self)
-
-Таймер дожен вызывать метод update постоянно.\\
-\hline village & рабочая система & Village – Класс зоны Village & \_\_init\_\_(self)
-
-Инициализирует все поля и методы внутри конкретной зоны.\\
-\hline footman & рабочая система & Footman – Класс наследник от Adnd\_actor & \_\_init\_\_(self, x, y, z)
-
-Инициализирует все поля и методы внутри конкретного экземпляра класса Footman.\\
-\hline grunt & рабочая система & Grunt – Класс наследник от Adnd\_actor & \_\_init\_\_(self, x, y, z)
-
-Инициализирует все поля и методы внутри конкретного экземпляра класса Grunt.\\
-\hline mage & рабочая система & Mage – Класс наследник от Adnd\_actor & \_\_init\_\_(self, x, y, z)
-
-Инициализирует все поля и методы внутри конкретного экземпляра класса Mage.\\
-\hline ruins & рабочая система & Ruins – Класс зоны Ruins & \_\_init\_\_(self)
-
-Инициализирует все поля и методы внутри конкретной зоны.
-
-walk(self, step\_x, step\_y, actor)
-
-Сценарий для движения персонажа.
-
-ai(self, actor)
-
-Сценарий для персонажей противников.\\
-\hline bggame & рабочая система & BaldursGame – Класс игры BaldursGame & \_\_init\_\_(self, x, y, z)
-
-Инициализирует все поля и методы внутри конкретной игры.\\
-\hline main & рабочая система & Main – Класс Main & методы отсутствуют
-
+\subsubsection{Класс Sprite}
+
+Класс Sprite относится к rpg и используется для отображения изображения на холсте.
+
+Описание методов класса Sprite представлено в таблице \ref{table:sprite_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Sprite}\label{table:sprite_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:sprite_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	set\_tag(self, tag) & Устанавливает тег спрайта, параметр tag: тег спрайта. \\
+	\hline
+	set\_z(self, z) & Устанавливает z-координату спрайта, параметр z: координата z. \\
+	\hline
+	get\_tag(self) & Возвращает тег спрайта. \\
+	\hline
+	set\_coords(self, new\_x, new\_y) & Обновляет координаты спрайта, параметр new\_x: координата x, параметр new\_y: координата y. \\
+	\hline
+	update(self) & Обновляет анимацию спрайта. \\
+	\hline
 \end{xltabular}
-\renewcommand{\arraystretch}{1.0} % восстановление сетки
+
+\subsubsection{Класс Animation}
+
+Класс Animation относится к rpg и предназначен для отображения набора изображений, как анимации на холсте.
+
+Описание методов класса Animation представлено в таблице \ref{table:animation_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Animation}\label{table:animation_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:animation_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	update(self) & Меняет текущее изображение в списке изображений. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Класс Graphics}
+
+Класс Graphics относится к rpg и предназначен для работы графической системы в платформе.
+
+Описание методов класса Graphics представлено в таблице \ref{table:Graphics_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Graphics}\label{table:Graphics_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Graphics_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	add\_sprite(self, sprite, x, y, z, **kwargs) & Добавляет спрайт на Canvas, параметр sprite: спрайт, параметр x: координата x, параметр y: координата y, параметр z: координата z, параметр kwargs: параметры относящиеся к конкретному изображению в tkinter. \\
+	\hline
+	update(self) & Перерисовывает все спрайты. \\
+	\hline
+	change\_sprite(self, sprite, new\_sprite) & Меняет спрайт на новый в Canvas, параметр sprite: экземпляр спрайта, параметр new\_sprite: новый спрайт. \\
+	\hline
+	delete\_sprite(self, sprite) & Удаляет спрайт с Canvas, параметр sprite: экземпляр спрайта. \\
+	\hline
+	clear\_all(self) & Удаляет все спрайты с Canvas. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Класс Rectangle}
+
+Класс Rectangle относится к rpg и предназначен для создания прямоугольника, который нужен для объектов и зон.
+
+Описание методов класса Rectangle представлено в таблице \ref{table:Rectangle_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Rectangle}\label{table:Rectangle_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Rectangle_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	is\_in(self, rect) &Проверяет, входит ли прямоугольник self в прямоугольник rect, параметр rect: прямоугольник. \\
+	\hline
+	is\_point\_inside(self, target\_x, target\_y) & Проверяет, входит ли точка (x, y) в данный прямоугольник, параметр target\_x: точка x, параметр target\_y: точка y. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Класс Object}
+
+Класс Object относится к rpg и предназначен для инициализации объектов.
+
+Описание методов класса Object представлено в таблице \ref{table:Object_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Object}\label{table:Object_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Object_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	set\_state(self, state\_name) & Меняет текущее состояние объекта, параметр state\_name: новое состояние. \\
+	\hline
+	actor\_in(self, actor) & Вызывается когда персонаж входит внутрь объекта, параметр actor: персонаж входящий в объект. \\
+	\hline
+	update(self) & Обновляетинформацию об объекте. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Класс Portal}
+
+Класс Portal относится к rpg и предназначен для объектов используемых для переходов между зонами.
+
+Описание методов класса Portal представлено в таблице \ref{table:Portal_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Portal}\label{table:Portal_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Portal_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	actor\_in(self, actor) & Проверяет находится ли персонаж внутри портала, параметр actor: проверяемый персонаж. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Класс Actor}
+
+Класс Actor относится к rpg и предназначен для инициализации персонажей, а так для хранения базовых механик передвижения.
+
+Описание методов класса Actor представлено в таблице \ref{table:Actor_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Actor}\label{table:Actor_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Actor_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	update(self) & Изменяет координаты и состояние персонажа. \\
+	\hline
+	search\_position(self, new\_x, new\_y) & Изменяет направление движения у персонажа, параметр new\_x: координата новой точки x, параметр new\_y: координата новой точки y. \\
+	\hline
+	stop\_move(self) & Останавливает движение персонажа. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Класс Adnd\_actor}
+
+Класс Adnd\_actor относится к rpg и предназначен для создания персонажа игры с механиками взаимодействия с другими персонажами.
+
+Описание методов класса Adnd\_actor представлено в таблице \ref{table:Adnd_actor_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Adnd\_actor}\label{table:Adnd_actor_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Adnd_actor_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	click(self) & Вызывается при клике на персонажа. \\
+	\hline
+	attack(self, actor) & Совершает атаку по actor, параметр actor: персонаж, которого атакуют. \\
+	\hline
+	update(self) & Обновляет состояние персонажа. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Класс Area}
+
+Класс Area относится к rpg и предназначен для создания зоны, хранящей в себе определённое количество объектов, изображений.
+
+Описание методов класса Area представлено в таблице \ref{table:Area_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Area}\label{table:Area_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Area_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	add\_sprite(self, sprite, x, y, z) & Добавляет спрайт в зону, параметр sprite: экземпляр спрайта, параметр x: коодрината x, параметр y: коодрината y, параметр z: коодрината z. \\
+	\hline
+	add\_object(self, obj, x, y, z) & Добавляет объект в зону, параметр obj: объект, параметр x: коодрината x, параметр y: коодрината y, параметр z: коодрината z. \\
+	\hline
+	remove\_object(self, obj) & Удаляет объект из зоны. \\
+	\hline
+	load\_sprites(self) & Загружает все спрайты зоны. \\
+	\hline
+	add\_rect(self, rec) &  Добавляет прямоугольник в зону, параметр rec: прямоугольник. \\
+	\hline
+	entry\_script(self) & Запускается, когда команда входит в зону. \\
+	\hline
+	exit\_script(self) & Запускается, когда команда выходит из зоны. \\
+	\hline
+	update(self) & Изменяет и проверяет изменение всех объектов в зоне. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Класс Game}
+
+Класс Game относится к rpg и предназначен для создания персонажа игры с механиками взаимодействия с другими персонажами.
+
+Описание методов класса Game представлено в таблице \ref{table:Game_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы класса Game}\label{table:Game_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Game_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	new\_area(self, name, area) & Добавляет новую зону в список, параметр name: имя зоны, параметр area: класс area. \\
+	\hline
+	set\_area(self, name) & Устанавливает текущую зону, загружает графику зоны, параметр name: имя зоны. \\
+	\hline
+	new\_actor(self, name, **params) & Создаёт класс, потомок от Actor и создаёт поле из параметров, и установление их в начальные значения,
+	параметр name: название нового класса, параметр params: поля нового класса. \\
+	\hline
+	add\_pc\_to\_team(self, pc) & Добавляет персонажа в команду, параметр pc: персонаж, которого нужно добавить в команду. \\
+	\hline
+	remove\_pc\_from\_team(self, pc) &  Удаляет персонажа из команды, параметр pc: персонаж, которого нужно удалить. \\
+	\hline
+	start\_script(self, script\_function, script\_name, *args) & Запускает сценарий в отдельном потоке с возможностью остановки и передачи аргументов,
+	параметр script\_function: Функция, содержащая код сценария,
+	параметр script\_name: Имя сценария,
+	параметр args: Дополнительные аргументы, которые нужно передать в сценарий.. \\
+	\hline
+	stop\_script(self, script\_name) & Останавливает сценарий по имени, параметр script\_name: имя сценария, который нужно остановить. \\
+	\hline
+	set\_team(self, x, y, z) & Устанавливает координаты персонажей команды, параметр x: координата x, параметр y: координата y, параметр z: координата z. \\
+	\hline
+	update(self) & Вызывается в таймере для обновления всех переменных в текущей зоне. \\
+	\hline
+	mouse\_left\_click(self, event) & Обрабатывает клик мыши, параметр event: клим мыши. \\
+	\hline
+	timer(self) & Таймер дожен вызывать метод update постоянно. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Модуль Grunt}
+
+Модуль Grunt относится к примеру работы платформы и предназначен для создания персонажа орка.
+
+Описание методов модуля Grunt представлено в таблице \ref{table:Grunt_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы модуля Grunt}\label{table:Grunt_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Grunt_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	new\_actor('Grunt', category='enemy', damage=10, hp=10, strange=5, wizdom=10, name='Grunt',
+	states=\{\}) & Создаёт персонажа орка. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Модуль Mage}
+
+Модуль Mage относится к примеру работы платформы и предназначен для создания персонажа мага.
+
+Описание методов модуля Mage представлено в таблице \ref{table:Mage_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы модуля Mage}\label{table:Mage_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Mage_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	new\_actor('Mage', category='pc', damage=10, hp=10, strange=5, wizdom=10, name='Mage',
+	states=\{\}) & Создаёт персонажа мага. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Модуль Footman}
+
+Модуль Footman относится к примеру работы платформы и предназначен для создания персонажа рыцаря.
+
+Описание методов модуля Grunt представлено в таблице \ref{table:Footman_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы модуля Footman}\label{table:Footman_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Footman_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	new\_actor('Footman', category='npc', damage=10, hp=10, strange=5, wizdom=10, name='Footman',
+	states=\{\}) & Создаёт персонажа рыцаря. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Модуль Village}
+
+Модуль Village относится к примеру работы платформы и предназначен для создания зоны деревня.
+
+Описание методов модуля Village представлено в таблице \ref{table:Village_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы модуля Village}\label{table:Village_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Village_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	\_\_init\_\_(self) & Инициализирует зону Village. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Модуль Ruins}
+
+Модуль Ruins относится к примеру работы платформы и предназначен для создания зоны деревня.
+
+Описание методов модуля Ruins представлено в таблице \ref{table:Ruins_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы модуля Ruins}\label{table:Ruins_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:Ruins_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	\_\_init\_\_(self) & Инициализирует зону Ruins. \\
+	\hline
+	walk(self, step\_x, step\_y, actor) & Сценарий для движения персонажа, параметр step\_x: шаг движения x, параметр step\_y: шаг движения y. \\
+	\hline
+	ai(self, actor) & Сценарий для противников, параметр step\_x: размер шага x до персонажа игрока, параметр step\_y: размер шага x до персонажа игрока, параметр actor: персонаж противник. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Модуль bggame}
+
+Модуль bggame относится к примеру работы платформы и предназначен для создания экземпляра игры.
+
+Описание методов модуля bggame представлено в таблице \ref{table:bggame_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы модуля bggame}\label{table:bggame_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:bggame_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	\_\_init\_\_(self, canvas, window, **params) & Инициализирует игру bggame, параметр canvas: класс графической системы, параметр window: окно на которое будет выводится игра. \\
+	\hline
+\end{xltabular}
+
+\subsubsection{Модуль main}
+
+Модуль main относится к примеру работы платформы и предназначен для создания экземпляра игры.
+
+Описание методов модуля main представлено в таблице \ref{table:main_methods}.
+
+\begin{xltabular}{\textwidth}{|X|X|}
+	\caption{Методы модуля main}\label{table:main_methods} \\
+	\hline \centrow
+	Название метода & \centrow  Описание метода \\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\endfirsthead
+	\caption*{Продолжение таблицы \ref{table:main_methods}}\\
+	\hline \centrow 1 & \centrow 2 \\ \hline
+	\finishhead
+	root = tk.Tk() & Создаёт окно tkinter. \\
+	\hline
+	root.geometry('1500x1500') & Указывает размер окну tkinter. \\
+	\hline
+	canvas = Graphics(root, width=1500, height=1500) & Создание экземпляра класса graphics, который будет взаимодействовать с окном. \\
+	\hline
+	Graphics.canvas = canvas & Присваивание canvas в статическое поле. \\
+	\hline
+	BaldursGame(canvas, root) & Создание новой игры BaldursGame. \\
+	\hline
+	сanvas.place(height = 1500, width =1500) & Размещение canvas на окне tkinter. \\
+	\hline
+	BaldursGame.timer & Вызов метода timer у BaldursGame. \\
+	\hline
+	root.mainloop() & Основной цикл обработки событий. \\
+	\hline
+\end{xltabular}
+
+\renewcommand{\arraystretch}{1.0}
 
 \subsection{Модульное тестирование разработанного приложения}
 
-Модульный тест для класса Rectangle из модели данных представлен на рисунке \ref{unitUser:image}.
+Модульный тест для класса Rectangle из модели данных представлен на рисунке \ref{unitRec:image}.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=Python]
@@ -258,8 +472,8 @@ class TestRectangle(unittest.TestCase):
 		intersect_bottom = Rectangle(2, 0, 2, 3)
 		self.assertTrue(self.rect.is_in(intersect_bottom))
 \end{lstlisting}  
-\caption{Модульный тест класса User}
-\label{unitUser:image}
+\caption{Модульный тест класса Rectangle}
+\label{unitRec:image}
 \end{figure}
 
 \subsection{Системное тестирование разработанного приложения}

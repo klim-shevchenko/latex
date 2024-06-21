@@ -1,32 +1,32 @@
 \section{Техническое задание}
 \subsection{Основание для разработки}
 
-Основанием для разработки является задание на выпускную квалификационную работу бакалавра <\Тема \ТемаВтораяСтрока>.
+Основанием для разработки является задание на выпускную квалификационную работу бакалавра <<\Тема \ТемаВтораяСтрока>>.
 
 \subsection{Цель и назначение разработки}
 
 Основной задачей выпускной квалификационной работы является разработка платформы для создания компьютерных изометрических ролевых игр с заранее отрисованным двумерным фоном и спрайтовыми персонажами для продвижения популярности рпг-игр».
 
-Данный программный продукт предназначен для демонстрации практических навыков, полученных в течение обучения. Исходя из этого, основную цель предлагается рассмотреть в разрезе двух групп подцелей.
+Данный программный продукт предназначен для демонстрации практических навыков, полученных в течение обучения.
 
 Задачами данной разработки являются:
-\begin{itemize}
-\item анализ существующих ролевых игр.
-\item разработка концептуальной модели ролевых игр.
-\item проектирование программной системы для создания ролевых игр.
-\item реализация программной системы для создания ролевых игр.
-\item тестирование разработанной системы.
-\end{itemize}
+\begin{enumerate}
+\item Анализ существующих ролевых игр.
+\item Разработка концептуальной модели ролевых игр.
+\item Проектирование программной системы для создания ролевых игр.
+\item Реализация программной системы для создания ролевых игр.
+\item Тестирование разработанной системы.
+\end{enumerate}
 
 \subsection{Требования пользователя к платформе}
 
 платформа должна включать в себя:
 \begin{itemize}
-    \item создание зон.
-    \item создание объектов.
-    \item создание персонажей.
-    \item добавление объектов в зону.
-    \item удаление объектов из зоны.
+    \item создание зон;
+    \item создание объектов;
+    \item создание персонажей;
+    \item добавление объектов в зону;
+    \item удаление объектов из зоны;
     \item реализацию сценариев.
 \end{itemize}
 
@@ -107,8 +107,8 @@ Area.set\_enter\_script(script)
 		
 				time.sleep(2)
 \end{lstlisting}  
-\caption{пример Ruins}
-\label{ruins2:image}
+\caption{Пример создания игровой зоны Ruins}
+\label{ruins:image}
 \end{figure}
 продолжение на рисунке \ref{ruins2:image}:
 \begin{figure}[H]
@@ -134,8 +134,8 @@ Area.set\_enter\_script(script)
 			self.set\_team(500, 300, 100)
 			self.timer()
 	\end{lstlisting}  
-	\caption{пример Ruins}
-	\label{ruins:image}
+	\caption{Пример создания игровой зоны Ruins}
+	\label{ruins2:image}
 \end{figure}
 
 
@@ -166,7 +166,7 @@ Area.set\_enter\_script(script)
 			self.set\_team(500, 300, 100)
 			self.timer()
 	\end{lstlisting}  
-\caption{создание персонажа}
+\caption{Пример создания персонажа Mage}
 \label{answer:image}
 \end{figure}
 
@@ -213,7 +213,7 @@ Area.set\_enter\_script(script)
 					self.stop\_move()
 					self.set\_state('death')
 \end{lstlisting}  
-\caption{атака персонажа}
+\caption{Пример задания правил атаки персонажа}
 \label{attack:image}
 \end{figure}
 
@@ -262,7 +262,7 @@ Area.set\_enter\_script(script)
 				actor.search\_position(new\_x, new\_y)
 				time.sleep(2)
 	\end{lstlisting}  
-\caption{зона}
+\caption{Пример создания зоны Ruins}
 \label{area:image}
 \end{figure}
 
@@ -316,7 +316,7 @@ Area.set\_enter\_script(script)\\
 				self.add\_object(self.grunt, 500, 185, 1)
 				p = Portal(400, 400, 200, 200, 'Village', 480, 100)
 	\end{lstlisting}  
-	\caption{переход}
+	\caption{Пример перехода между зонами}
 	\label{portal:image}
 \end{figure}
 
@@ -357,7 +357,7 @@ Area.set\_enter\_script(script)\\
 					self.stop\_move()
 					self.set\_state('death')
 \end{lstlisting}  
-\caption{бой}
+\caption{Пример задания боя между персонажами}
 \label{battle:image}
 \end{figure}
 Продолжение на рисунке \ref{battle2:image}:
@@ -410,128 +410,8 @@ Area.set\_enter\_script(script)\\
 					actor.is\_attack = False
 				time.sleep(2)
 \end{lstlisting}  
-\caption{бой}
+\caption{Пример задания боя между персонажами}
 \label{battle2:image}
-\end{figure}
-\paragraph{Соединение движка и окон tkinter}
-Модуль graphics содержит в себе библиотеку tkinter . Класс Graphics внутри модуля является наследником tk.Canvas. Этот класс взаимодействует с окном root = tk.TK() в программном модуле пользователя. Модуль sprite тоже взаимодействует с tkinter. Изображение для спрайта берётся с помощью метода tk.PhotoImage(file=name)
-Пример представлен на рисунке \ref{tk:image}:
-\begin{figure}[H]
-	\begin{lstlisting}[language=Python]
-		модуль sprite
-		
-		import tkinter as tk
-		class Sprite:
-			def \_\_init\_\_(self, image):
-				self.image = tk.PhotoImage(file=image)
-				self.tag = None
-				self.x = 0
-				self.y = 0
-				self.z = 0		
-			def set\_tag(self, tag):
-				self.tag = tag
-				
-			def set\_z(self, z):
-				self.z = z
-				
-			def get\_tag(self):
-				return self.tag	
-			def set\_coords(self, new\_x, new\_y):
-				if self.tag:
-					self.x = new\_x
-					self.y = new\_y
-			def update(self):
-				pass
-	\end{lstlisting}  
-\caption{tkinter}
-\label{tk:image}
-\end{figure}
-Продолжение на рисунке \ref{tkinter2:image}:
-\begin{figure}[H]
-	\begin{lstlisting}[language=Python]
-		import tkinter as tk
-		class Graphics(tk.Canvas):
-			canvas = None
-			def \_\_init\_\_(self, master, **kwargs):
-				super().\_\_init\_\_(master, **kwargs)
-				self.sprites = []
-				Graphics.canvas = self			
-			def add\_sprite(self, sprite, x, y, z, **kwargs):
-				tag = self.create\_image(x, y, image=sprite.image, anchor='center', **kwargs)
-				sprite.set\_tag(tag)
-				sprite.set\_z(z)
-				sprite.x = x
-				sprite.y = y
-				self.sprites.append(sprite)
-				self.sprites.sort(key=lambda sprite: sprite.z)
-			def update(self):
-				for sprite in self.sprites:
-				sprite.update()
-				self.tag\_raise(sprite.get\_tag())
-				self.coords(sprite.get\_tag(), sprite.x, sprite.y)
-				self.itemconfig(sprite.get\_tag(), image=sprite.image)
-			def change\_sprite(self, sprite, new\_sprite):
-				old\_sprite\_pos = None
-				for i, s in enumerate(self.sprites):
-				if s.get\_tag() == sprite.get\_tag():
-					old\_sprite\_pos = i
-					break
-				if old\_sprite\_pos is not None:
-					old\_tag = sprite.get\_tag()
-					
-				self.sprites[old\_sprite\_pos] = new\_sprite
-				new\_sprite.set\_tag(old\_tag)\
-				new\_sprite.set\_tag(old\_tag)
-				new\_sprite.set\_z(sprite.z)
-				self.tag\_raise(old\_tag)
-				self.coords(old\_tag, sprite.x, sprite.y)
-				self.itemconfig(old\_tag, image=new\_sprite.image)
-			
-			def delete\_sprite(self, sprite):
-				self.delete(sprite.get\_tag()
-				self.sprites.remove(sprite)
-			def clear\_all(self):	
-				for sprite in self.sprites:
-				self.delete(sprite.get\_tag())
-				self.sprites.clear()
-	\end{lstlisting}  
-	\caption{tkinter}
-	\label{tkinter2:image}
-\end{figure}
-
-
-Продолжение на рисунке \ref{tkinter3:image}:
-\begin{figure}[H]
-	\begin{lstlisting}[language=Python]
-		модуль baldursgame '''пользовательский модуль'''
-		from ruins import *
-		from village import *
-		import time
-		import random
-		class BaldursGame(Game):
-			def \_\_init\_\_(self, canvas, window, **params):
-				super().\_\_init\_\_(canvas, window, **params)
-				from mage import Mage
-				self.add\_pc\_to\_team(Mage(0, 0, 0))
-				self.new\_area('Ruins', Ruins())
-				self.new\_area('Village', Village())
-				self.set\_area('Ruins')
-				self.set\_team(500, 300, 100)
-				self.timer()
-		модуль main
-		from bggame import *
-		root = tk.Tk()
-		root.geometry('1500x1500')
-		exit\_button = tk.Button(root, text="Exit", fg="red", command=root.destroy)
-		canvas = Graphics(root, width=1500, height=1500)
-		Graphics.canvas = canvas
-		BaldursGame(canvas, root)
-		canvas.place(height = 1500, width =1500)
-		BaldursGame.timer
-		root.mainloop()
-	\end{lstlisting}  
-	\caption{tkinter}
-	\label{tkinter3:image}
 \end{figure}
 
 \subsection{Особенности Dungeons and Dragons}
@@ -584,19 +464,9 @@ Area.set\_enter\_script(script)\\
 	\end{itemize}
 \end{itemize}
 
-\subsection{Интерфейс пользователя}
+\subsection{Пример игры}
 Создаётся рабочее окно tkinter, на нём пользователь видит текущую зону, из зоны current\_area, так же все объекты, находящиеся в ней, и всех персонажей из команды персонажей, текущей игры. Пользователь может взаимодействовать с окном с помощью мыши. Левым кликом мыши по окну вызывает метод mouse\_click у текущей игры. который вызывает проверку находится ли в координатах, в которых был совершён клик, какой-либо персонаж или объект, и если есть, то вызвать метод on\_click. Если персонажа в данных координатах нет, то вызвать у всех персонажей с полем category == "pc" метод search\_position(x,y), который указывает координаты движения, которые должны прийти персонажи. Так же работают все сценарии, конкретной зоны. они работают до тех пор, пока не будет вызвано условие останавливающее, конкретный сценарий.
-\subsection{ Моделирование вариантов использования}
-На основании анализа предметной области в программе должны быть реализованы следующие прецеденты:
-\begin{enumerate}
-\item Создание персонажа.
-\item Создание зоны.
-\item Создание объекта.
-\item Удаление объекта.
-\item Создание сценария.
-\item Удаление сценария.
-\end{enumerate}
-Таким образом, на рисунке ~\ref{prec:image}сформированы следующие действия пользователя и их последствия.
+На рисунке ~\ref{prec:image} сформированы следующие действия пользователя и их последствия.
 \begin{figure}[ht]
 	\includegraphics[width=1\linewidth]{prec}
 	\caption{Шаблон интерфейса игры}
