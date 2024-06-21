@@ -6,14 +6,14 @@
 Класс Sprite относится к rpg и используется для отображения изображения на холсте.
 
 Описание методов класса Sprite представлено в таблице \ref{table:sprite_methods}.
-
+\renewcommand{\arraystretch}{0.8} % уменьшение расстояний до сетки таблицы
 \begin{xltabular}{\textwidth}{|X|X|}
 	\caption{Методы класса Sprite}\label{table:sprite_methods} \\
 	\hline \centrow
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:sprite_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:sprite_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	set\_tag(self, tag) & Устанавливает тег спрайта, параметр tag: тег спрайта. \\
@@ -40,7 +40,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:animation_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:animation_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	update(self) & Меняет текущее изображение в списке изображений. \\
@@ -59,7 +59,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Graphics_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Graphics_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	add\_sprite(self, sprite, x, y, z, **kwargs) & Добавляет спрайт на Canvas, параметр sprite: спрайт, параметр x: координата x, параметр y: координата y, параметр z: координата z, параметр kwargs: параметры относящиеся к конкретному изображению в tkinter. \\
@@ -86,7 +86,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Rectangle_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Rectangle_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	is\_in(self, rect) &Проверяет, входит ли прямоугольник self в прямоугольник rect, параметр rect: прямоугольник. \\
@@ -107,7 +107,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Object_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Object_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	set\_state(self, state\_name) & Меняет текущее состояние объекта, параметр state\_name: новое состояние. \\
@@ -130,7 +130,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Portal_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Portal_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	actor\_in(self, actor) & Проверяет находится ли персонаж внутри портала, параметр actor: проверяемый персонаж. \\
@@ -149,7 +149,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Actor_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Actor_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	update(self) & Изменяет координаты и состояние персонажа. \\
@@ -172,7 +172,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Adnd_actor_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Adnd_actor_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	click(self) & Вызывается при клике на персонажа. \\
@@ -195,7 +195,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Area_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Area_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	add\_sprite(self, sprite, x, y, z) & Добавляет спрайт в зону, параметр sprite: экземпляр спрайта, параметр x: коодрината x, параметр y: коодрината y, параметр z: коодрината z. \\
@@ -228,7 +228,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Game_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Game_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	new\_area(self, name, area) & Добавляет новую зону в список, параметр name: имя зоны, параметр area: класс area. \\
@@ -271,7 +271,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Grunt_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Grunt_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	new\_actor('Grunt', category='enemy', damage=10, hp=10, strange=5, wizdom=10, name='Grunt',
@@ -291,7 +291,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Mage_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Mage_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	new\_actor('Mage', category='pc', damage=10, hp=10, strange=5, wizdom=10, name='Mage',
@@ -311,7 +311,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Footman_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Footman_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	new\_actor('Footman', category='npc', damage=10, hp=10, strange=5, wizdom=10, name='Footman',
@@ -331,7 +331,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Village_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Village_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	\_\_init\_\_(self) & Инициализирует зону Village. \\
@@ -350,7 +350,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:Ruins_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:Ruins_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	\_\_init\_\_(self) & Инициализирует зону Ruins. \\
@@ -373,7 +373,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:bggame_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:bggame_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	\_\_init\_\_(self, canvas, window, **params) & Инициализирует игру bggame, параметр canvas: класс графической системы, параметр window: окно на которое будет выводится игра. \\
@@ -392,7 +392,7 @@
 	Название метода & \centrow  Описание метода \\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\endfirsthead
-	\caption*{Продолжение таблицы \ref{table:main_methods}}\\
+	\continuecaption{Продолжение таблицы \ref{table:main_methods}}\\
 	\hline \centrow 1 & \centrow 2 \\ \hline
 	\finishhead
 	root = tk.Tk() & Создаёт окно tkinter. \\
@@ -423,57 +423,99 @@
 \begin{lstlisting}[language=Python]
 import unittest
 from rpg.rectangle import Rectangle
+
 class TestRectangle(unittest.TestCase):
 	def setUp(self):
 		# Прямоугольник для использования в тестах
 		self.rect = Rectangle(1, 1, 4, 4)
+	
 	def test_inside(self):
-	'''Тест: прямоугольник внутри другого'''
+		'''Тест: прямоугольник внутри другого'''
 		rect_outside = Rectangle(0, 0, 6, 6)
 		self.assertTrue(self.rect.is_in(rect_outside))
+	
 	def test_outside(self):
-	'''Тест: прямоугольник снаружи другого'''
+		'''Тест: прямоугольник снаружи другого'''
 		rect_inside = Rectangle(2, 2, 2, 2)
 		self.assertFalse(self.rect.is_in(rect_inside))
+	
 	def test_apartside(self):
-	'''Тест: прямоугольник отдельно от другого'''
+		'''Тест: прямоугольник отдельно от другого'''
 		rect_apart = Rectangle(6, 6, 2, 2)
 		self.assertFalse(self.rect.is_in(rect_apart))
+	
 	def test_touching_left(self):
-	'''Тест: прямоугольник касается слева'''
+		'''Тест: прямоугольник касается слева'''
 		touching_left = Rectangle(0, 2, 1, 1)
 		self.assertFalse(self.rect.is_in(touching_left))
+		
 	def test_touching_right(self):
 		'''Тест: прямоугольник касается справа'''
 		touching_right = Rectangle(5, 2, 1, 1)
 		self.assertFalse(self.rect.is_in(touching_right))
+	
 	def test_touching_top(self):
 		'''Тест: прямоугольник касается сверху'''
 		touching_top = Rectangle(2, 5, 1, 1)
 		self.assertFalse(self.rect.is_in(touching_top))
+	
 	def test_touching_bottom(self):
 		'''Тест: прямоугольник касается снизу'''
 		touching_bottom = Rectangle(2, 0, 1, 1)
 		self.assertFalse(self.rect.is_in(touching_bottom))
-	def test_intersect_left(self):
-		'''Тест: пересечение прямоугольника слева'''
-		intersect_left = Rectangle(0, 2, 3, 2)
-		self.assertTrue(self.rect.is_in(intersect_left))
-	def test_intersect_right(self):
-		'''Тест: пересечение прямоугольника справа'''
-		intersect_right = Rectangle(3, 2, 3, 2)
-		self.assertTrue(self.rect.is_in(intersect_right))
-	def test_intersect_top(self):
-		'''Тест: пересечение прямоугольника сверху'''
-		intersect_top = Rectangle(2, 3, 2, 3)
-		self.assertTrue(self.rect.is_in(intersect_top))
-	def test_intersect_bottom(self):
-		'''Тест: пересечение прямоугольника снизу'''
-		intersect_bottom = Rectangle(2, 0, 2, 3)
-		self.assertTrue(self.rect.is_in(intersect_bottom))
+	
+
 \end{lstlisting}  
 \caption{Модульный тест класса Rectangle}
 \label{unitRec:image}
+\end{figure}
+Продолжение модульного теста для класса Rectangle из модели данных представлен на рисунке \ref{unitRec2:image}.
+\begin{figure}[H]
+	\begin{lstlisting}[language=Python]
+			def test_intersect_left(self):
+				'''Тест: пересечение прямоугольника слева'''
+				intersect_left = Rectangle(0, 2, 3, 2)
+				self.assertTrue(self.rect.is_in(intersect_left))
+			
+			def test_intersect_right(self):
+				'''Тест: пересечение прямоугольника справа'''
+				intersect_right = Rectangle(3, 2, 3, 2)
+				self.assertTrue(self.rect.is_in(intersect_right))
+			
+			def test_intersect_top(self):
+				'''Тест: пересечение прямоугольника сверху'''
+				intersect_top = Rectangle(2, 3, 2, 3)
+				self.assertTrue(self.rect.is_in(intersect_top))
+			
+			def test_intersect_bottom(self):
+				'''Тест: пересечение прямоугольника снизу'''
+				intersect_bottom = Rectangle(2, 0, 2, 3)
+				self.assertTrue(self.rect.is_in(intersect_bottom))
+			
+			def test_is_point_inside(self):
+				# Создайте прямоугольник
+				rect = Rectangle(0, 0, 10, 10)
+				
+				# Точка внутри прямоугольника
+				self.assertTrue(rect.is_point_inside(5, 5))
+				
+				# Точка на границе прямоугольника
+				self.assertTrue(rect.is_point_inside(0, 0))
+				self.assertTrue(rect.is_point_inside(0, 10))
+				self.assertTrue(rect.is_point_inside(10, 0))
+				self.assertTrue(rect.is_point_inside(10, 10))
+				
+				# Точка вне прямоугольника
+				self.assertFalse(rect.is_point_inside(-1, -1))
+				self.assertFalse(rect.is_point_inside(11, 11))
+				self.assertFalse(rect.is_point_inside(5, -5))
+				self.assertFalse(rect.is_point_inside(-5, 5))
+		
+		if __name__ == '__main__':
+		unittest.main()
+	\end{lstlisting}  
+	\caption{Модульный тест класса Rectangle}
+	\label{unitRec2:image}
 \end{figure}
 
 \subsection{Системное тестирование разработанного приложения}
