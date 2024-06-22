@@ -151,7 +151,7 @@ Area.set\_enter\_script(script)
 			'''
 			super().__init__(canvas, window, **params)
 			from mage import Mage
-			self.add_pc\_to\_team(Mage(0, 0, 0))
+			self.add_pc_to_team(Mage(0, 0, 0))
 			self.new_area('Ruins', Ruins())
 			self.set_area('Ruins')
 			self.set_team(500, 300, 100)
@@ -199,20 +199,20 @@ Area.set\_enter\_script(script)
 Пример представлен на рисунке \ref{attack:image}:
 \begin{figure}[H]
 	\begin{lstlisting}[language=Python]
-		модуль adnd\_actor:
+		модуль adnd_actor:
 		from math import sqrt
 		from rpg.actor import Actor
 		from rpg.animation import Animation
 		import rpg.game
 		import time
 		
-		class Adnd\_actor(Actor):
+		class Adnd_actor(Actor):
 		
-			ATTACK\_RANGE = 50
+			ATTACK_RANGE = 50
 		
 			def __init__(self, x, y, z, **params):
 				super().__init__(x, y, z, **params)
-				self.on\_click = self.click
+				self.on_click = self.click
 			
 			def click(self):
 				pc = rpg.game.Game.game.team_of_pc[0]
@@ -221,7 +221,7 @@ Area.set\_enter\_script(script)
 				dx = pc.pos_x - self.pos_x
 				dy = pc.pos_y - self.pos_y
 				dist = sqrt(dx * dx + dy * dy)
-				if dist <= self.ATTACK\_RANGE:
+				if dist <= self.ATTACK_RANGE:
 					pc.is_attack = True
 					pc.attack(self)
 					time.sleep(0.125)
@@ -251,8 +251,8 @@ Area.set\_enter\_script(script)
 		class Ruins(Area):
 			def \_\_init\_\_(self):
 				super().__init__()
-				self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
-				self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
+				self.add_sprite(Sprite('images/fon3.png'), 590, 400, 0)
+				self.add_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
 				from grunt import Grunt
 				self.grunt = Grunt(0,0,0)
 				from footman import Footman
@@ -320,21 +320,21 @@ Area.set\_enter\_script(script)
 		from rpg.game import Game
 		from rpg.rectangle import Rectangle	
 		class Portal(Object):
-			def __ini\__(self, x, y, width, height, area, team_x, team_y):
+			def __ini__(self, x, y, width, height, area, team_x, team_y):
 				self.states = None
 				self.sprite = None
 				self.category = 'portal'
 				super().__init__(x, y, 0)
 				self.rectangle = Rectangle(x, y, width, height)
 				self.area = area
-				self.team\_x = team_x
-				self.team\_y = team_y
+				self.team_x = team_x
+				self.team_y = team_y
 				self.visible = False
 			
 			def actor_in(self, actor):
 				if actor.category == "pc":
 					Game.game.set_area(self.area)
-					Game.game.set_team(self.team\_x, self.team_y, 100)
+					Game.game.set_team(self.team_x, self.team_y, 100)
 				actor.stop_move()		
 		модуль ruins
 		import random
@@ -367,14 +367,14 @@ Area.set\_enter\_script(script)
 Пример представлен на рисунке \ref{battle:image}:
 \begin{figure}[H]
 	\begin{lstlisting}[language=Python]
-		модуль adnd\_actor:
+		модуль adnd_actor:
 		from math import sqrt
 		from rpg.actor import Actor
 		from rpg.animation import Animation
 		import rpg.game
 		import time
-		class Adnd\_actor(Actor):	
-			ATTACK\_RANGE = 50
+		class Adnd_actor(Actor):	
+			ATTACK_RANGE = 50
 			def __init__(self, x, y, z, **params):
 				super().__init__(x, y, z, **params)
 				self.on_click = self.click
@@ -385,7 +385,7 @@ Area.set\_enter\_script(script)
 				dx = pc.pos_x - self.pos_x
 				dy = pc.pos_y - self.pos_y
 				dist = sqrt(dx * dx + dy * dy)
-				if dist <= self.ATTACK\_RANGE:
+				if dist <= self.ATTACK_RANGE:
 					pc.is_attack = True
 						pc.attack(self)
 						time.sleep(0.125)
@@ -417,8 +417,8 @@ Area.set\_enter\_script(script)
 		class Ruins(Area):
 			def __init__(self):
 				super().__init__()
-				self.add\_sprite(Sprite('images/fon3.png'), 590, 400, 0)
-				self.add\_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
+				self.add_sprite(Sprite('images/fon3.png'), 590, 400, 0)
+				self.add_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
 				from grunt import Grunt
 				self.grunt = Grunt(0,0,0)
 				from footman import Footman
@@ -426,12 +426,12 @@ Area.set\_enter\_script(script)
 				self.add_object(self.footman, 120, 120, 1)
 				self.add_object(self.grunt, 500, 185, 1)
 				p = Portal(400, 400, 200, 200, 'Village', 480, 100)
-				self.add\_object(p, p.pos_x, p.pos_y, 100)
+				self.add_object(p, p.pos_x, p.pos_y, 100)
 				Game.game.start_script(self.ai, "ai", self.grunt)
 				Game.game.start_script(self.walk_two, "footman", 50, 50)	
 			def ai(self, actor):
 				if actor.hp <= 0:
-					Game.game.stop\_script("ai")
+					Game.game.stop_script("ai")
 				import rpg.game
 				pc = rpg.game.Game.game.team_of_pc[0]
 				new_x = pc.pos_x
@@ -441,7 +441,7 @@ Area.set\_enter\_script(script)
 				dx = pc.pos_x - actor.pos_x
 				dy = pc.pos_y - actor.pos_y
 				dist = sqrt(dx * dx + dy * dy)
-				if dist <= actor.ATTACK\_RANGE:
+				if dist <= actor.ATTACK_RANGE:
 					actor.is_attack = True
 					actor.attack(pc)
 					time.sleep(1)

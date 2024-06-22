@@ -93,21 +93,21 @@ Python — это язык программирования, который ши
 					self.coords(sprite.get_tag(), sprite.x, sprite.y)
 					self.itemconfig(sprite.get_tag(), image=sprite.image)
 					def change_sprite(self, sprite, new_sprite):
-					old\_sprite_pos = None
+					old_sprite_pos = None
 				for i, s in enumerate(self.sprites):
-					if s.get\_tag() == sprite.get_tag():
+					if s.get_tag() == sprite.get_tag():
 						old_sprite_pos = i
 						break
 				if old_sprite_pos is not None:
 					old_tag = sprite.get_tag()
 			
 				self.sprites[old_sprite_pos] = new_sprite
-				new_sprite.set\_tag(old_tag)
+				new_sprite.set_tag(old_tag)
 				new_sprite.set_tag(old_tag)
 				new_sprite.set_z(sprite.z)
 				self.tag_raise(old_tag)
-				self.coords(old\_tag, sprite.x, sprite.y)
-				self.itemconfig(old\_tag, image=new_sprite.image)
+				self.coords(old_tag, sprite.x, sprite.y)
+				self.itemconfig(old_tag, image=new_sprite.image)
 			
 			def delete_sprite(self, sprite):
 				self.delete(sprite.get_tag()
@@ -172,13 +172,13 @@ Python — это язык программирования, который ши
 Описание всех классов:
 \begin{enumerate}
 	\item Graphics -- класс, управляющий спрайтами. Содержит в себе следующие поля: self.sprites -- список спрайтов. И методы:
-		\begin{enumerate}
+		\begin{itemize}
 			\item add\_sprite(self, sprite x, y, z, image) -- добавляет в список спрайт, сохраняет координаты.
 			\item change\_sprite(self, sprite new\_sprite) -- меняет местами спрайты в списке.
 			\item delete\_sprite(self, sprite) -- удаляет спрайт из списка.
 			\item clear\_all(self) -- очищает список спрайтов.
 			\item update(self) -- добавляет все спрайты из списка на форму.
-		\end{enumerate}
+		\end{itemize}
 	\item Sprite -- класс, хранящий в себе изображение игровых объектов image. Содержит в себе следующие поля:
 		\begin{enumerate}
 			\item self.x -- координата x.
@@ -198,8 +198,8 @@ Python — это язык программирования, который ши
 	\item Animation -- класс, хранящий в себе список изображений игровых объектов image. Потомок класса Sprite.  Содержит в себе следующие поля:
 		\begin{enumerate}
 			\item self.current\_frame -- текущий кадр.
-			\item self.images  -- Загрузка всех кадров анимации.
-			\item self.image -- Установка начального изображения.
+			\item self.images  -- загрузка всех кадров анимации.
+			\item self.image -- установка начального изображения.
 			\item self.speed -- скорость анимации.
 			\item self.counter -- счётчик кадров.
 			\item self.cycle -- проверка на то что должна ли быть анимация циклично или нет.
