@@ -44,24 +44,24 @@ Python — это язык программирования, который ши
 		
 		import tkinter as tk
 		class Sprite:
-			def \_\_init\_\_(self, image):
+			def __init__(self, image):
 				self.image = tk.PhotoImage(file=image)
 				self.tag = None
 				self.x = 0
 				self.y = 0
 				self.z = 0		
-				def set\_tag(self, tag):
+				def set_tag(self, tag):
 				self.tag = tag
 			
-			def set\_z(self, z):
+			def set_z(self, z):
 				self.z = z
 			
-			def get\_tag(self):
+			def get_tag(self):
 				return self.tag	
-			def set\_coords(self, new\_x, new\_y):
+			def set_coords(self, new_x, new_y):
 				if self.tag:
-				self.x = new\_x
-				self.y = new\_y
+				self.x = new_x
+				self.y = new_y
 			def update(self):
 				pass
 	\end{lstlisting}  
@@ -74,14 +74,14 @@ Python — это язык программирования, который ши
 		import tkinter as tk
 		class Graphics(tk.Canvas):
 			canvas = None
-			def \_\_init\_\_(self, master, **kwargs):
-				super().\_\_init\_\_(master, **kwargs)
+			def __init__(self, master, **kwargs):
+				super().__init__(master, **kwargs)
 				self.sprites = []
 				Graphics.canvas = self			
-			def add\_sprite(self, sprite, x, y, z, **kwargs):
-				tag = self.create\_image(x, y, image=sprite.image, anchor='center', **kwargs)
-				sprite.set\_tag(tag)
-				sprite.set\_z(z)
+			def add_sprite(self, sprite, x, y, z, **kwargs):
+				tag = self.create_image(x, y, image=sprite.image, anchor='center', **kwargs)
+				sprite.set_tag(tag)
+				sprite.set_z(z)
 				sprite.x = x
 				sprite.y = y
 				self.sprites.append(sprite)
@@ -89,32 +89,32 @@ Python — это язык программирования, который ши
 			def update(self):
 				for sprite in self.sprites:
 					sprite.update()
-					self.tag\_raise(sprite.get\_tag())
-					self.coords(sprite.get\_tag(), sprite.x, sprite.y)
-					self.itemconfig(sprite.get\_tag(), image=sprite.image)
-					def change\_sprite(self, sprite, new\_sprite):
-					old\_sprite\_pos = None
+					self.tag_raise(sprite.get_tag())
+					self.coords(sprite.get_tag(), sprite.x, sprite.y)
+					self.itemconfig(sprite.get_tag(), image=sprite.image)
+					def change_sprite(self, sprite, new_sprite):
+					old\_sprite_pos = None
 				for i, s in enumerate(self.sprites):
-					if s.get\_tag() == sprite.get\_tag():
-						old\_sprite\_pos = i
+					if s.get\_tag() == sprite.get_tag():
+						old_sprite_pos = i
 						break
-				if old\_sprite\_pos is not None:
-					old\_tag = sprite.get\_tag()
+				if old_sprite_pos is not None:
+					old_tag = sprite.get_tag()
 			
-				self.sprites[old\_sprite\_pos] = new\_sprite
-				new\_sprite.set\_tag(old\_tag)\
-				new\_sprite.set\_tag(old\_tag)
-				new\_sprite.set\_z(sprite.z)
-				self.tag\_raise(old\_tag)
+				self.sprites[old_sprite_pos] = new_sprite
+				new_sprite.set\_tag(old_tag)
+				new_sprite.set_tag(old_tag)
+				new_sprite.set_z(sprite.z)
+				self.tag_raise(old_tag)
 				self.coords(old\_tag, sprite.x, sprite.y)
-				self.itemconfig(old\_tag, image=new\_sprite.image)
+				self.itemconfig(old\_tag, image=new_sprite.image)
 			
-			def delete\_sprite(self, sprite):
-				self.delete(sprite.get\_tag()
+			def delete_sprite(self, sprite):
+				self.delete(sprite.get_tag()
 				self.sprites.remove(sprite)
-			def clear\_all(self):	
+			def clear_all(self):	
 				for sprite in self.sprites:
-					self.delete(sprite.get\_tag())
+					self.delete(sprite.get_tag())
 					self.sprites.clear()
 	\end{lstlisting}  
 	\caption{Пример использования tkinter в программе}
@@ -131,20 +131,20 @@ Python — это язык программирования, который ши
 		import time
 		import random
 		class BaldursGame(Game):
-		def \_\_init\_\_(self, canvas, window, **params):
-		super().\_\_init\_\_(canvas, window, **params)
+		def __init__(self, canvas, window, **params):
+		super().__init__(canvas, window, **params)
 		from mage import Mage
-		self.add\_pc\_to\_team(Mage(0, 0, 0))
-		self.new\_area('Ruins', Ruins())
-		self.new\_area('Village', Village())
-		self.set\_area('Ruins')
-		self.set\_team(500, 300, 100)
+		self.add_pc_to_team(Mage(0, 0, 0))
+		self.new_area('Ruins', Ruins())
+		self.new_area('Village', Village())
+		self.set_area('Ruins')
+		self.set_team(500, 300, 100)
 		self.timer()
 		модуль main
 		from bggame import *
 		root = tk.Tk()
 		root.geometry('1500x1500')
-		exit\_button = tk.Button(root, text="Exit", fg="red", command=root.destroy)
+		exit_button = tk.Button(root, text="Exit", fg="red", command=root.destroy)
 		canvas = Graphics(root, width=1500, height=1500)
 		Graphics.canvas = canvas
 		BaldursGame(canvas, root)
@@ -162,162 +162,159 @@ Python — это язык программирования, который ши
 
 \subsection{Архитектура платформы для создания ролевых игр}
 \subsubsection{Диаграмма компонентов классов}
-Диаграмма компонентов описывает особенности физического представления разрабатываемой системы. Она позволяет определить архитектуру системы, установив зависимости между программными компонентами, в роли которых может выступать как исходный, так и исполняемый код. Основными графическими элементами диаграммы компонентов являются компоненты, интерфейсы, а также зависимости между ними. На рисунке \ref{diagram.eps:image} изображена диаграмма компонентов для проектируемой системы. Она включает в себя основной класс платформы игры Game и производные от него классы, класс Object с наследниками и их параметрами (полями и методами).
+Диаграмма компонентов описывает особенности физического представления разрабатываемой системы. Она позволяет определить архитектуру системы, установив зависимости между программными компонентами, в роли которых может выступать как исходный, так и исполняемый код. Основными графическими элементами диаграммы компонентов являются компоненты, интерфейсы, а также зависимости между ними. На рисунке \ref{diagram:image} изображена диаграмма компонентов для проектируемой системы. Она включает в себя основной класс платформы игры Game и производные от него классы, класс Object с наследниками и их параметрами (полями и методами).
 \begin{figure}[ht]
 	\center{\includegraphics[width=1\linewidth]{diagram}}
 	\caption{Диаграмма компонентов}
 	\label{diagram:image}
 \end{figure}
 \paragraph{Описание классов}
-\begin{enumerate}
-	\item[Graphics] -- класс, управляющий спрайтами. Содержит в себе следующие поля:
+	Graphics -- класс, управляющий спрайтами. Содержит в себе следующие поля:
 		self.sprites -- список спрайтов.
 		и методы:
-	\begin{enumerate}
-		\item add\_sprite(self, sprite x, y, z, image) -- добавляет в список спрайт, сохраняет координаты.
-		\item change\_sprite(self, sprite new\_sprite) -- меняет местами спрайты в списке.
-		\item delete\_sprite(self, sprite) -- удаляет спрайт из списка.
-		\item clear\_all(self) -- очищает список спрайтов.
-		\item update(self) -- добавляет все спрайты из списка на форму.
-	\end{enumerate}
-	\item[Sprite] -- класс, хранящий в себе изображение игровых объектов image. Содержит в себе следующие поля:
-	\begin{enumerate}
-		\item self.x -- координата x.
-		\item self.y -- координата y.
-		\item self.z -- координата z.
-		\item self.tag -- уникальный номер спрайта.
-		\item self.image -- изображение.
-	\end{enumerate}
-	и методы:
-	\begin{enumerate}
-		\item set\_tag(self, tag) -- устанавливает tag спрайту.
-		\item get\_tag(self) -- возвращает tag спрайта.
-		\item set\_z(self, z) -- устанавливает z координату.
-		\item set\_coords(self, new\_x, new\_y) -- устанавливает новые координаты.
-		\item update(self) -- ничего не делает.
-	\end{enumerate}
-	\item[Animation] -- класс, хранящий в себе список изображений игровых объектов image. Потомок класса Sprite.  Содержит в себе следующие поля:
-	\begin{enumerate}
-		\item self.current\_frame -- текущий кадр.
-		\item self.images  -- Загрузка всех кадров анимации.
-		\item self.image -- Установка начального изображения.
-		\item self.speed -- скорость анимации.
-		\item self.counter -- счётчик кадров.
-		\item self.cycle -- проверка на то что должна ли быть анимация циклично или нет.
-		\item self.running -- проверка проигрывается ли сейчас анимация.
-		\item update(self) -- обновляет кадр в анимации.
-	\end{enumerate}
-	и методы:
-		update(self) -- обновляет кадр в анимации.
-	\item[Rectangle] -- абстрактный класс прямоугольника. Содержит в себе следующие поля:
-	\begin{enumerate}
-		\item self.pos\_x -- координата x.
-		\item self.pos\_y -- координата y.
-		\item self.width -- ширина.
-		\item self.height -- высота.
-	\end{enumerate}
-	и методы:
-	\begin{enumerate}
-		\item is\_in(self, rect) -- функция проверки нахождения одного прямоугольника в другом.
-		\item is\_point\_inside(self, target\_x, target\_y) -- функция проверки точки в пределах прямоугольника.
-	\end{enumerate}
-	\item[Object] -- класс, от которого наследуются классы Adnd\_Actor, Actor, Portal. Содержит в себе следующие поля:
-	\begin{enumerate}
-		\item self.pos\_x -- координата x.
-		\item self.pos\_y -- координата y.
-		\item self.pos\_z -- координата z.
-		\item self.current\_state -- текущее состояние.
-		\item self.visible -- видимость портала.
-		\item self.on\_click -- функция клика по объекту.
-		\item self.rectangle -- прямоугольник объекта.
-	\end{enumerate}
-	и методы:
-	\begin{enumerate}
-		\item set\_state(self, state\_name) -- устанавливает состояние.
-		\item actor\_in(self, actor) -- ничего не делает.
-		\item update(self) -- ничего не делает.
-	\end{enumerate}
-	\item[Portal] -- класс объекта для перехода между зонами. Потомок класса Object. Содержит в себе следующие поля:
-	\begin{enumerate}
-		\item self.states -- состояние портала.
-		\item self.sprite -- спрайт портала.
-		\item self.category -- категория.
-		\item self.rectangle -- прямоугольник портала.
-		\item self.area -- зона в которую ведёт портал.
-		\item self.team\_x -- координата x в  которую нужно разместить команду.
-		\item self.team\_y -- координата y в  которую нужно разместить команду.
-		\item self.visible -- видимость портала.
-	\end{enumerate}
-	и методы:
-		actor\_in(actor) -- события, которые произойдут, когда персонаж окажется внутри прямоугольника портала.
-	\item[Actor] -- класс персонажа, содержащий внутри себя основные поля и методы для перемещения по рабочему окну. Содержит в себе следующие поля:
-	\begin{enumerate}
-		\item self.sprite -- спрайт персонажа.
-		\item self.speed\_x -- значение скорости x.
-		\item self.speed\_y -- значение скорости y.
-		\item self.target\_x -- координата x в которую должен прийти персонаж.
-		\item self.target\_y -- координата y в которую должен прийти персонаж.
-		\item self.rectangle -- прямоугольник персонажа.
-		\item self.is\_attack -- атакует ли сейчас персонаж.
-	\end{enumerate}
-	и методы:
-	\begin{enumerate}
-		\item update(self) -- функция обновления координат и состояния персонажа.
-		\item search\_position(self, new\_x, new\_y) -- поиск координат в которые нужно двигаться персонажу.
-		\item stop\_move(self) -- остановка движения персонажа.
-	\end{enumerate}
-	\item[Adnd\_Actor] -- класс персонажа, содержащий методы связанные с взаимодействием с другими персонажами. Является наследником Actor. Содержит в себе следующие поля:
+		\begin{enumerate}
+			\item add\_sprite(self, sprite x, y, z, image) -- добавляет в список спрайт, сохраняет координаты.
+			\item change\_sprite(self, sprite new\_sprite) -- меняет местами спрайты в списке.
+			\item delete\_sprite(self, sprite) -- удаляет спрайт из списка.
+			\item clear\_all(self) -- очищает список спрайтов.
+			\item update(self) -- добавляет все спрайты из списка на форму.
+		\end{enumerate}
+	Sprite -- класс, хранящий в себе изображение игровых объектов image. Содержит в себе следующие поля:
+		\begin{enumerate}
+			\item self.x -- координата x.
+			\item self.y -- координата y.
+			\item self.z -- координата z.
+			\item self.tag -- уникальный номер спрайта.
+			\item self.image -- изображение.
+		\end{enumerate}
+		и методы:
+		\begin{enumerate}
+			\item set\_tag(self, tag) -- устанавливает tag спрайту.
+			\item get\_tag(self) -- возвращает tag спрайта.
+			\item set\_z(self, z) -- устанавливает z координату.
+			\item set\_coords(self, new\_x, new\_y) -- устанавливает новые координаты.
+			\item update(self) -- ничего не делает.
+		\end{enumerate}
+	Animation -- класс, хранящий в себе список изображений игровых объектов image. Потомок класса Sprite.  Содержит в себе следующие поля:
+		\begin{enumerate}
+			\item self.current\_frame -- текущий кадр.
+			\item self.images  -- Загрузка всех кадров анимации.
+			\item self.image -- Установка начального изображения.
+			\item self.speed -- скорость анимации.
+			\item self.counter -- счётчик кадров.
+			\item self.cycle -- проверка на то что должна ли быть анимация циклично или нет.
+			\item self.running -- проверка проигрывается ли сейчас анимация.
+			\item update(self) -- обновляет кадр в анимации.
+		\end{enumerate}
+		и метод: update(self) -- обновляет кадр в анимации.
+	Rectangle -- абстрактный класс прямоугольника. Содержит в себе следующие поля:
+		\begin{enumerate}
+			\item self.pos\_x -- координата x.
+			\item self.pos\_y -- координата y.
+			\item self.width -- ширина.
+			\item self.height -- высота.
+		\end{enumerate}
+		и методы:
+		\begin{enumerate}
+			\item is\_in(self, rect) -- функция проверки нахождения одного прямоугольника в другом.
+			\item is\_point\_inside(self, target\_x, target\_y) -- функция проверки точки в пределах прямоугольника.
+		\end{enumerate}
+	Object -- класс, от которого наследуются классы Adnd\_Actor, Actor, Portal. Содержит в себе следующие поля:
+		\begin{enumerate}
+			\item self.pos\_x -- координата x.
+			\item self.pos\_y -- координата y.
+			\item self.pos\_z -- координата z.
+			\item self.current\_state -- текущее состояние.
+			\item self.visible -- видимость портала.
+			\item self.on\_click -- функция клика по объекту.
+			\item self.rectangle -- прямоугольник объекта.
+		\end{enumerate}
+		и методы:
+		\begin{enumerate}
+			\item set\_state(self, state\_name) -- устанавливает состояние.
+			\item actor\_in(self, actor) -- ничего не делает.
+			\item update(self) -- ничего не делает.
+		\end{enumerate}
+	Portal -- класс объекта для перехода между зонами. Потомок класса Object. Содержит в себе следующие поля:
+		\begin{enumerate}
+			\item self.states -- состояние портала.
+			\item self.sprite -- спрайт портала.
+			\item self.category -- категория.
+			\item self.rectangle -- прямоугольник портала.
+			\item self.area -- зона в которую ведёт портал.
+			\item self.team\_x -- координата x в  которую нужно разместить команду.
+			\item self.team\_y -- координата y в  которую нужно разместить команду.
+			\item self.visible -- видимость портала.
+		\end{enumerate}
+		и методы:
+			actor\_in(actor) -- события, которые произойдут, когда персонаж окажется внутри прямоугольника портала.
+	Actor -- класс персонажа, содержащий внутри себя основные поля и методы для перемещения по рабочему окну. Содержит в себе следующие поля:
+		\begin{enumerate}
+			\item self.sprite -- спрайт персонажа.
+			\item self.speed\_x -- значение скорости x.
+			\item self.speed\_y -- значение скорости y.
+			\item self.target\_x -- координата x в которую должен прийти персонаж.
+			\item self.target\_y -- координата y в которую должен прийти персонаж.
+			\item self.rectangle -- прямоугольник персонажа.
+			\item self.is\_attack -- атакует ли сейчас персонаж.
+		\end{enumerate}
+		и методы:
+		\begin{enumerate}
+			\item update(self) -- функция обновления координат и состояния персонажа.
+			\item search\_position(self, new\_x, new\_y) -- поиск координат в которые нужно двигаться персонажу.
+			\item stop\_move(self) -- остановка движения персонажа.
+		\end{enumerate}
+	Adnd\_Actor -- класс персонажа, содержащий методы связанные с взаимодействием с другими персонажами. Является наследником Actor. Содержит в себе следующие поля:
 		self.on\_click событие при клике на персонажа
-	и методы:
-	\begin{enumerate}
-		\item update(self) -- функция обновления координат и состояния персонажа.
-		\item click(self) -- функция вызывается при клике по персонажу.
-		\item attack(self, actor) --  функция атаки персонажа по другому персонажу.
-	\end{enumerate}
-	\item[Area] -- зона, в которой находятся персонажи и объекты. Содержит следующие поля:
-	\begin{enumerate}
-		\item self.area\_zone -- параметр определяющий особенности конкретной зоны.
-		\item self.objects -- список, хранящий в себе множество объектов.
-		\item self.sprites -- список фоновых спрайтов.
-		\item self.rectangles -- прямоугольник зоны.
-	\end{enumerate}
-	и методы:
-	\begin{enumerate}
-		\item add\_sprite(self, sprite, x, y, z) -- функция добавляет спрайт в зону.
-		\item add\_object(self, obj, x, y, z) -- функция добавляет объект в зону.
-		\item remove\_object(self, obj) -- функция удаляет объект из зоны.
-		\item load\_sprites(self) -- функция загружает все спрайты зоны.
-		\item add\_rect(self, rec) -- функция добавляет прямоугольник в зону.
-		\item entry\_script(self) -- функция запускается, когда команда входит в зону.
-		\item exit\_script(self) -- функция запускается, когда команда выходит из зоны.
-		\item update(self) -- функция изменяет и проверяет изменение всех объектов в зоне.
-	\end{enumerate}
-	\item[Game] -- класс, управляющий игровой системой. Имеет следующие поля:
-	\begin{enumerate}
-		\item self.rpg\_dict\_of\_area -- словарь, хранящий в себе множество экземпляров класса Area.
-		\item self.team\_of\_pc -- список, хранящий в себе имена экземпляров класса Actor с параметром category = "pc".
-		\item self.canvas -- графика.
-		\item self.root -- окно для графики.
-		\item self.current\_area -- параметр хранящий, текущую зону.
-		\item self.scripts -- словарь для хранения запущенных сценариев.
-		\item self.events -- словарь для хранения запущенных event`ов сценариев.
-		\item self.canvas.bind("<Button-1>", self.mouse\_left.\_click) -- обработка клика мыши по рабочему окну.
-	\end{enumerate}
-	и методы:
-	\begin{enumerate}
-		\item new\_area(self, name, area) -- функция добавляет новую зону в список.
-		\item set\_area(self, name) -- функция устанавливает текущую зону, загружает графику зоны.
-		\item new\_actor(self, name, **params) -- функция создаёт класс, потомок от Actor и создаёт поле из параметров, и установление их в начальные значения.
-		\item add\_pc\_to\_team(self, pc) -- функция добавляет персонажа в команду.
-		\item remove\_pc\_from\_team(self, pc) -- функция удаляет персонажа из команды.
-		\item start\_script(self, script\_function, script\_name, *args) -- функция запускает сценарий в отдельном потоке с возможностью остановки и передачи аргументов.
-		\item stop\_script(self, script\_name) -- функция останавливает сценарий по имени.
-		\item set\_team(self, x, y, z) -- функция устанавливает координаты персонажей команды.
-		\item update(self) -- функция вызывается в таймере для обновления всех переменных в текущей зоне.
-		\item mouse\_left\_click(self, event) -- функция обрабатывает клик мыши.
-		\item timer(self) -- функция должна вызывать метод update постоянно.
-	\end{enumerate}
-\end{enumerate}
+		и методы:
+		\begin{enumerate}
+			\item update(self) -- функция обновления координат и состояния персонажа.
+			\item click(self) -- функция вызывается при клике по персонажу.
+			\item attack(self, actor) --  функция атаки персонажа по другому персонажу.
+		\end{enumerate}
+	Area -- зона, в которой находятся персонажи и объекты. Содержит следующие поля:
+		\begin{enumerate}
+			\item self.area\_zone -- параметр определяющий особенности конкретной зоны.
+			\item self.objects -- список, хранящий в себе множество объектов.
+			\item self.sprites -- список фоновых спрайтов.
+			\item self.rectangles -- прямоугольник зоны.
+		\end{enumerate}
+		и методы:
+		\begin{enumerate}
+			\item add\_sprite(self, sprite, x, y, z) -- функция добавляет спрайт в зону.
+			\item add\_object(self, obj, x, y, z) -- функция добавляет объект в зону.
+			\item remove\_object(self, obj) -- функция удаляет объект из зоны.
+			\item load\_sprites(self) -- функция загружает все спрайты зоны.
+			\item add\_rect(self, rec) -- функция добавляет прямоугольник в зону.
+			\item entry\_script(self) -- функция запускается, когда команда входит в зону.
+			\item exit\_script(self) -- функция запускается, когда команда выходит из зоны.
+			\item update(self) -- функция изменяет и проверяет изменение всех объектов в зоне.
+		\end{enumerate}
+	Game -- класс, управляющий игровой системой. Имеет следующие поля:
+		\begin{enumerate}
+			\item self.rpg\_dict\_of\_area -- словарь, хранящий в себе множество экземпляров класса Area.
+			\item self.team\_of\_pc -- список, хранящий в себе имена экземпляров класса Actor с параметром category = "pc".
+			\item self.canvas -- графика.
+			\item self.root -- окно для графики.
+			\item self.current\_area -- параметр хранящий, текущую зону.
+			\item self.scripts -- словарь для хранения запущенных сценариев.
+			\item self.events -- словарь для хранения запущенных event`ов сценариев.
+			\item self.canvas.bind("<Button-1>", self.mouse\_left.\_click) -- обработка клика мыши по рабочему окну.
+		\end{enumerate}
+		и методы:
+		\begin{enumerate}
+			\item new\_area(self, name, area) -- функция добавляет новую зону в список.
+			\item set\_area(self, name) -- функция устанавливает текущую зону, загружает графику зоны.
+			\item new\_actor(self, name, **params) -- функция создаёт класс, потомок от Actor и создаёт поле из параметров, и установление их в начальные значения.
+			\item add\_pc\_to\_team(self, pc) -- функция добавляет персонажа в команду.
+			\item remove\_pc\_from\_team(self, pc) -- функция удаляет персонажа из команды.
+			\item start\_script(self, script\_function, script\_name, *args) -- функция запускает сценарий в отдельном потоке с возможностью остановки и передачи аргументов.
+			\item stop\_script(self, script\_name) -- функция останавливает сценарий по имени.
+			\item set\_team(self, x, y, z) -- функция устанавливает координаты персонажей команды.
+			\item update(self) -- функция вызывается в таймере для обновления всех переменных в текущей зоне.
+			\item mouse\_left\_click(self, event) -- функция обрабатывает клик мыши.
+			\item timer(self) -- функция должна вызывать метод update постоянно.
+		\end{enumerate}
 
 \subsubsection{Реализация графической подсистемы}
 Графическая подсистема основана на библиотеке tkinter, которая используется для создания графического интерфейса пользователя. В контексте платформы, tkinter используется для отображения и управления спрайтами — графическими объектами, которые представляют персонажей, предметы и другие элементы игры.
