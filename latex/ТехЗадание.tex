@@ -249,7 +249,7 @@ Area.set\_enter\_script(script)
 		from rpg.portal import Portal
 		
 		class Ruins(Area):
-			def \_\_init\_\_(self):
+			def __init__(self):
 				super().__init__()
 				self.add_sprite(Sprite('images/fon3.png'), 590, 400, 0)
 				self.add_rect(Rectangle(x=0, y=0, width=Sprite('images/fon3.png').image.width(), height=Sprite('images/fon3.png').image.height()))
